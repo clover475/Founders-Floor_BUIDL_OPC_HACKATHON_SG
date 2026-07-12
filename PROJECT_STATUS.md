@@ -2,8 +2,9 @@
 
 ## Snapshot
 
-- Current milestone: Global-ready public launch candidate with clickable Office Rooms, multi-room Coffee Corner, Elevator Stage, and a persistent Work Log with an achievement forest
-- Current health: T1-T9 pass local lint/build checks; T8 launch UX repairs are deployed and production single-browser validation passed; T9 (Work Log/history fix) passed local browser validation but is not yet deployed; Coffee fifth-seat cap still needs a real five-device check
+- Current milestone: Global-ready public launch candidate with clickable Office Rooms, multi-room Coffee Corner, Elevator Stage, AI Elevator Pitch Coach, region picker, Community Board, and a persistent Work Log with an achievement forest
+- Current health: T1-T9 pass local lint/build checks; T8 launch UX repairs are deployed and production single-browser validation passed; T9 (Work Log/history fix + judge-demo seed data) is merged and pushed to `main` (commit `8e14288`) but not yet deployed/production-validated; Coffee fifth-seat cap still needs a real five-device check
+- Note: T9 was built against a stale local clone. Before pushing, 18 commits of parallel work (region picker + clock-in template persistence, Community Board merging desk-check requests with Ship Wall, AI Elevator Pitch Coach) had already landed on `origin/main` from another session. Merged cleanly with manual conflict resolution in `app-shell.tsx`, `clock-in-form.tsx`, and both message catalogs — no functional overlap, since Community Board (peer help) and Work Log/Forest (personal achievement history) are different concerns. Always `git fetch`/`git status` before starting work on this repo; it is being actively edited from more than one place.
 - Last updated: 2026-07-12
 
 ## Completed
