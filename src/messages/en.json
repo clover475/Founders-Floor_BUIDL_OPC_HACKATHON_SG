@@ -95,11 +95,15 @@
     "openSeat": "Open seat {number}",
     "joined": "joined",
     "available": "available",
+    "takeSeat": "Take seat {number}",
     "leave": "Leave table",
     "full": "Table full",
     "join": "Join Coffee Corner",
-    "joinTitle": "Join to open the live table",
-    "joinDescription": "The meeting is embedded only after you take a seat. Each coffee room has its own deterministic meeting link.",
+    "previewVideo": "Preview meeting room",
+    "previewNote": "Preview only — this does not reserve a seat.",
+    "setupRoom": "Set up this room",
+    "joinTitle": "Take a seat to open the live meeting",
+    "joinDescription": "The meeting loads only after you sit down. Click an open seat or use the button below.",
     "room": "Room: {room}"
   },
   "elevator": {

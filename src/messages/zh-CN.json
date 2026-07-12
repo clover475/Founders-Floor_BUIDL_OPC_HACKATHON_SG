@@ -95,11 +95,15 @@
     "openSeat": "空位 {number}",
     "joined": "已加入",
     "available": "可加入",
+    "takeSeat": "坐到第 {number} 位",
     "leave": "离开咖啡桌",
     "full": "座位已满",
     "join": "加入咖啡角",
-    "joinTitle": "加入后打开实时咖啡桌",
-    "joinDescription": "入座后才会加载会议。每个咖啡室都有独立的固定会议房间。",
+    "previewVideo": "预览会议室",
+    "previewNote": "仅预览，不占座位。",
+    "setupRoom": "设置这个房间",
+    "joinTitle": "选一个空位，打开实时会议",
+    "joinDescription": "入座后才会加载会议。点击空位，或使用下方按钮加入。",
     "room": "房间：{room}"
   },
   "elevator": {
