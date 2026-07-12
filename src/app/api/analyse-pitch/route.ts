@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.LLM_API_KEY ?? process.env.OPENAI_API_KEY;
 
     // No API key → return clearly labeled demo result
     if (!apiKey) {
@@ -115,14 +115,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(demo);
     }
 
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Provider-agnostic: supports OpenAI, DeepSeek, or any OpenAI-compatible API
+    // DeepSeek example: LLM_BASE_URL=https://api.deepseek.com/v1  LLM_MODEL=deepseek-chat
+    const baseUrl =
+      process.env.LLM_BASE_URL ??
+      process.env.OPENAI_BASE_URL ??
+      "https://api.openai.com/v1";
+    const model =
+      process.env.LLM_MODEL ??
+      process.env.OPENAI_MODEL ??
+      "gpt-4o-mini";
+
+    const llmRes = await fetch(`${baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
+        model,
         temperature: 0.3,
         max_tokens: 800,
         response_format: { type: "json_object" },
@@ -133,20 +144,20 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    if (!openaiRes.ok) {
-      const errText = await openaiRes.text();
-      console.error("OpenAI error", openaiRes.status, errText);
+    if (!llmRes.ok) {
+      const errText = await llmRes.text();
+      console.error("LLM error", llmRes.status, errText);
       return NextResponse.json(
-        { error: "AI service error", detail: openaiRes.status },
+        { error: "AI service error", detail: llmRes.status },
         { status: 502 },
       );
     }
 
-    const openaiData = (await openaiRes.json()) as {
+    const llmData = (await llmRes.json()) as {
       choices: { message: { content: string } }[];
     };
 
-    const raw = openaiData.choices[0]?.message?.content ?? "{}";
+    const raw = llmData.choices[0]?.message?.content ?? "{}";
     const result = JSON.parse(raw) as PitchAnalysisResult;
     result.demoMode = false;
 
