@@ -6,9 +6,11 @@ import { useState } from "react";
 export function JitsiMeeting({
   roomName,
   meetingUrl,
+  title = "Founders' Floor meeting",
 }: {
   roomName: string;
   meetingUrl: string;
+  title?: string;
 }) {
   const [failed, setFailed] = useState(false);
 
@@ -42,7 +44,7 @@ export function JitsiMeeting({
           </div>
         ) : (
           <iframe
-            title={`Coffee Corner meeting ${roomName}`}
+            title={`${title} ${roomName}`}
             src={meetingUrl}
             allow="camera; microphone; fullscreen; display-capture"
             onError={() => setFailed(true)}

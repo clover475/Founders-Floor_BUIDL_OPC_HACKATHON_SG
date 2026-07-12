@@ -13,6 +13,11 @@ export function getCoffeeJitsiRoomName() {
   return `founders-floor-${sanitizeRoomSegment(eventSlug)}-coffee`;
 }
 
+export function getElevatorJitsiRoomName() {
+  const { eventSlug } = getRealtimeConfig();
+  return `founders-floor-${sanitizeRoomSegment(eventSlug)}-elevator`;
+}
+
 export function getJitsiMeetingUrl(roomName: string) {
   const { jitsiDomain } = getRealtimeConfig();
   const params = new URLSearchParams({
