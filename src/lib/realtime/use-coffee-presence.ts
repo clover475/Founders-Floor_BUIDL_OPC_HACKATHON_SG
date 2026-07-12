@@ -35,13 +35,15 @@ export function useCoffeePresence() {
   const config = useMemo(() => getRealtimeConfig(), []);
   const client = useMemo(() => getSupabaseBrowserClient(), []);
   const channelRef = useRef<RealtimeChannel | null>(null);
+  const joinedRef = useRef(false);
+  const pendingJoinRef = useRef(false);
   const participant = useMemo(() => getOrCreateParticipant(), []);
   const [participants, setParticipants] = useState<CoffeePresence[]>([]);
   const [joined, setJoined] = useState(false);
   const [status, setStatus] = useState<CoffeeStatus>(config.enabled ? "idle" : "demo");
 
-  const localPresence: CoffeePresence = useMemo(
-    () => ({
+  const createLocalPresence = useCallback(
+    (): CoffeePresence => ({
       participantId: participant.participantId,
       nickname: participant.nickname,
       joinedAt: new Date().toISOString(),
@@ -52,6 +54,8 @@ export function useCoffeePresence() {
   const tableFull = participants.length >= COFFEE_CAPACITY && !joined;
 
   const leave = useCallback(async () => {
+    joinedRef.current = false;
+    pendingJoinRef.current = false;
     setJoined(false);
     setParticipants((current) =>
       current.filter((item) => item.participantId !== participant.participantId),
@@ -59,11 +63,9 @@ export function useCoffeePresence() {
 
     if (channelRef.current) {
       await channelRef.current.untrack();
-      await channelRef.current.unsubscribe();
-      channelRef.current = null;
     }
 
-    setStatus(config.enabled ? "idle" : "demo");
+    setStatus(config.enabled ? "connected" : "demo");
   }, [config.enabled, participant.participantId]);
 
   const join = useCallback(() => {
@@ -71,10 +73,12 @@ export function useCoffeePresence() {
       return;
     }
 
+    joinedRef.current = true;
     setJoined(true);
 
     if (!config.enabled || !client) {
       setStatus("demo");
+      const localPresence = createLocalPresence();
       setParticipants((current) => {
         const withoutMe = current.filter(
           (item) => item.participantId !== localPresence.participantId,
@@ -84,11 +88,22 @@ export function useCoffeePresence() {
       return;
     }
 
-    setStatus("connecting");
-  }, [client, config.enabled, localPresence, tableFull]);
+    const channel = channelRef.current;
+    if (!channel) {
+      pendingJoinRef.current = true;
+      setStatus("connecting");
+      return;
+    }
+
+    void channel.track(createLocalPresence()).catch(() => {
+      joinedRef.current = false;
+      setJoined(false);
+      setStatus("error");
+    });
+  }, [client, config.enabled, createLocalPresence, tableFull]);
 
   useEffect(() => {
-    if (!joined || !config.enabled || !client || channelRef.current) {
+    if (!config.enabled || !client || channelRef.current) {
       return;
     }
 
@@ -101,13 +116,30 @@ export function useCoffeePresence() {
     });
 
     channel.on("presence", { event: "sync" }, () => {
-      setParticipants(flattenPresenceState(channel.presenceState()));
+      const nextParticipants = flattenPresenceState(channel.presenceState());
+      const visibleParticipants = nextParticipants.slice(0, COFFEE_CAPACITY);
+      const localSeatIndex = nextParticipants.findIndex(
+        (item) => item.participantId === participant.participantId,
+      );
+
+      if (joinedRef.current && localSeatIndex >= COFFEE_CAPACITY) {
+        joinedRef.current = false;
+        pendingJoinRef.current = false;
+        setJoined(false);
+        void channel.untrack();
+      }
+
+      setParticipants(visibleParticipants);
     });
 
     channel.subscribe(async (subscribeStatus) => {
       if (subscribeStatus === "SUBSCRIBED") {
-        await channel.track(localPresence);
         setStatus("connected");
+
+        if (pendingJoinRef.current) {
+          pendingJoinRef.current = false;
+          await channel.track(createLocalPresence());
+        }
       }
 
       if (subscribeStatus === "CHANNEL_ERROR" || subscribeStatus === "TIMED_OUT") {
@@ -116,7 +148,8 @@ export function useCoffeePresence() {
     });
 
     channelRef.current = channel;
-  }, [client, config.enabled, config.eventSlug, joined, localPresence, participant.participantId]);
+    setStatus("connecting");
+  }, [client, config.enabled, config.eventSlug, createLocalPresence, participant.participantId]);
 
   useEffect(() => {
     return () => {
