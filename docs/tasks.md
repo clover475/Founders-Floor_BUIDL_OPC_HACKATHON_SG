@@ -81,3 +81,18 @@ Acceptance:
 - Browser language sets the first-visit default when no preference exists.
 - `npm run build` and `npm run lint` pass.
 - A 390px-wide browser has no horizontal overflow.
+
+## T7 — Live Office Floor presence
+
+- Add a Supabase Presence observer for the ordinary Office Rooms.
+- Track the current Clock In session only when the browser has an active local session.
+- Show real online coworkers ahead of seeded examples.
+- Mark seeded examples as demo and local fallback participants as local so public users are not misled.
+
+Acceptance:
+
+- `npm run build` and `npm run lint` pass.
+- Office Rooms still work without Supabase variables.
+- A visitor without a Clock In session can browse rooms without being tracked as a live coworker.
+- A clocked-in local user appears in their selected room with a local fallback badge when realtime is unavailable.
+- Demo coworkers remain visibly marked as demo.

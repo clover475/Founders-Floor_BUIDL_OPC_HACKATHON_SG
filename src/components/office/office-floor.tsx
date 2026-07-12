@@ -5,42 +5,93 @@ import { ClipboardCheck, DoorOpen, MessageSquarePlus, PencilLine } from "lucide-
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "use-intl";
 import { demoCoworkers } from "@/lib/demo-data";
+import { useFloorPresence } from "@/lib/realtime/use-floor-presence";
 import { loadDeskChecks, loadSession } from "@/lib/storage/repository";
 import type { Coworker, DeskCheck, FounderSession, RoomId } from "@/types/domain";
+import type { FloorPresence } from "@/types/realtime";
+
+type CoworkerCard = {
+  coworker: Coworker;
+  source: "live" | "local" | "demo";
+};
+
+function presenceToCoworker(presence: FloorPresence): Coworker {
+  return {
+    participantId: presence.participantId,
+    nickname: presence.nickname,
+    room: presence.room,
+    activity: presence.activity,
+    goal: presence.goal ?? "",
+  };
+}
 
 export function OfficeFloor({ roomId }: { roomId: RoomId }) {
   const t = useTranslations("office");
   const roomT = useTranslations("rooms");
   const [session, setSession] = useState<FounderSession | null>(null);
   const [deskChecks, setDeskChecks] = useState<DeskCheck[]>([]);
+  const floor = useFloorPresence(session);
 
   useEffect(() => {
     setSession(loadSession());
     setDeskChecks(loadDeskChecks());
   }, []);
 
-  const coworkers = useMemo(() => {
-    const demo = demoCoworkers.filter((item) => item.room === roomId);
-    if (!session || session.room !== roomId) {
-      return demo;
+  const coworkerCards = useMemo<CoworkerCard[]>(() => {
+    const liveCards = floor.participants
+      .filter((item) => item.room === roomId)
+      .map((item) => ({ coworker: presenceToCoworker(item), source: "live" as const }));
+
+    const localCards: CoworkerCard[] = [];
+    const liveParticipantIds = new Set(liveCards.map((item) => item.coworker.participantId));
+
+    if (session && session.room === roomId && !liveParticipantIds.has(session.participant.participantId)) {
+      localCards.push({
+        coworker: {
+          participantId: session.participant.participantId,
+          nickname: session.participant.nickname,
+          room: session.room,
+          activity: session.activity,
+          goal: session.goal,
+        },
+        source: "local",
+      });
     }
 
-    const you: Coworker = {
-      participantId: session.participant.participantId,
-      nickname: `${session.participant.nickname} (${t("you")})`,
-      room: session.room,
-      activity: session.activity,
-      goal: session.goal,
-    };
+    const demoCards = demoCoworkers
+      .filter((item) => item.room === roomId)
+      .map((item) => ({ coworker: item, source: "demo" as const }));
 
-    return [you, ...demo];
-  }, [roomId, session, t]);
+    return [...localCards, ...liveCards, ...demoCards];
+  }, [floor.participants, roomId, session]);
+
+  const liveCount = useMemo(
+    () => floor.participants.filter((item) => item.room === roomId).length,
+    [floor.participants, roomId],
+  );
+
+  const localParticipantId = session?.participant.participantId;
+
+  function displayName(card: CoworkerCard) {
+    if (card.coworker.participantId === localParticipantId) {
+      return `${card.coworker.nickname} (${t("you")})`;
+    }
+
+    return card.coworker.nickname;
+  }
 
   function coworkerGoal(coworker: Coworker) {
     if (coworker.participantId === "demo-mia") return t("demoMia");
     if (coworker.participantId === "demo-alex") return t("demoAlex");
     if (coworker.participantId === "demo-sam") return t("demoSam");
-    return coworker.goal;
+    return coworker.goal || t("noGoal");
+  }
+
+  function statusCopy() {
+    if (!floor.liveEnabled) return t("liveDemo");
+    if (floor.status === "connected") return t("liveConnected", { count: liveCount });
+    if (floor.status === "connecting") return t("liveConnecting");
+    return t("liveError");
   }
 
   return (
@@ -52,21 +103,27 @@ export function OfficeFloor({ roomId }: { roomId: RoomId }) {
           <p className="max-w-2xl text-sm leading-6 text-floor-muted">
             {t("description")}
           </p>
+          <p className="text-xs font-medium uppercase text-floor-muted">{statusCopy()}</p>
         </div>
 
         <div className="grid gap-3 md:grid-cols-2">
-          {coworkers.map((coworker) => (
-            <article key={coworker.participantId} className="border border-floor-line bg-white/75 p-4">
+          {coworkerCards.map((card) => (
+            <article key={`${card.source}-${card.coworker.participantId}`} className="border border-floor-line bg-white/75 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="font-semibold text-floor-ink">{coworker.nickname}</h2>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-semibold text-floor-ink">{displayName(card)}</h2>
+                    <span className="border border-floor-line px-2 py-0.5 text-[11px] uppercase text-floor-muted">
+                      {t(`${card.source}Badge`)}
+                    </span>
+                  </div>
                   <p className="mt-1 text-xs uppercase text-floor-muted">
-                    {t(coworker.activity === "focused" ? "focused" : "openToChat")}
+                    {t(card.coworker.activity === "focused" ? "focused" : "openToChat")}
                   </p>
                 </div>
                 <ClipboardCheck size={18} className="text-floor-green" aria-hidden="true" />
               </div>
-              <p className="mt-5 text-sm leading-6 text-floor-muted">{coworkerGoal(coworker)}</p>
+              <p className="mt-5 text-sm leading-6 text-floor-muted">{coworkerGoal(card.coworker)}</p>
             </article>
           ))}
         </div>

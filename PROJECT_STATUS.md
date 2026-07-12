@@ -2,8 +2,8 @@
 
 ## Snapshot
 
-- Current milestone: Global-ready public launch candidate with live Coffee Corner and Elevator Stage
-- Current health: T1-T5 and production two-browser Coffee/Elevator realtime smoke tests passed; T6 English/Chinese localization passes local automated and browser checks; T3 fifth-seat cap still needs a real five-device check
+- Current milestone: Global-ready public launch candidate with live Office Floor, Coffee Corner, and Elevator Stage
+- Current health: T1-T6 passed their local checks; T7 live Office Floor presence is implemented with local/demo fallback; production validation is still needed after Vercel deploy; T3 fifth-seat cap still needs a real five-device check
 - Last updated: 2026-07-12
 
 ## Completed
@@ -28,6 +28,7 @@
 - Deployment env compatibility added: `next.config.ts` maps Supabase Vercel integration variables (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_ANON_KEY`) into the browser-facing `NEXT_PUBLIC_SUPABASE_*` values at build time.
 - T4 correction complete: Elevator speaker Presence now carries active round metadata for late join recovery, stale or expired speaker Presence no longer blocks the stage, and end/reset/timeout paths release the local speaker role back to audience.
 - T6 complete: added English and Simplified Chinese catalogs using `use-intl`, browser-language detection, persistent manual switching, localized core product flows, locale-aware Ship Wall dates, and a mobile-safe global language control.
+- T7 complete: added `floor:lobby:{eventSlug}` Supabase Presence for ordinary Office Rooms, observer-only browsing for visitors without an active Clock In session, real coworker cards ahead of seeded examples, and explicit live/local/demo badges so public users can distinguish real participants from fallback data.
 
 ## In progress
 
@@ -44,9 +45,10 @@
 
 ## Next steps
 
-1. Run the public-launch safety pass before broad social distribution.
-2. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
-3. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
+1. Deploy T7 to Vercel and run a two-browser Office Floor presence smoke test.
+2. Run the public-launch safety pass before broad social distribution.
+3. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
+4. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
 
 ## Validation
 
@@ -68,3 +70,5 @@
 - Remaining gap: Coffee Corner fifth-seat cap has not been tested with five isolated identities in production.
 - T6 validation: `npm run lint` passed; `npm run build` passed; translation hard-code scan found only brand metadata, the name example, and the language control labels. Browser validation confirmed English-to-Chinese and Chinese-to-English switching, Chinese preference persistence across navigation, translated Coffee Corner content, and a 390px Clock In layout with `scrollWidth` equal to `innerWidth`.
 - T6 production validation: Vercel deployed commit `56f057e`; a Chinese-browser visit opened in Chinese, switching to English updated the full navigation, and the English choice persisted when navigating to Coffee Corner. Supabase remained configured on the production homepage.
+- T7 validation: `npm run lint` passed; `npm run build` passed. Local browser validation on port 3007 confirmed that a visitor without an active Clock In session sees only demo-marked seeded coworkers, and a clocked-in user appears in the selected room with a local fallback badge when Supabase variables are unavailable locally.
+- T7 remaining gap: production two-browser Office Floor presence has not been run yet because the T7 commit has not been deployed to Vercel.
