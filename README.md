@@ -2,9 +2,9 @@
 
 # Founders’ Floor
 
-### The virtual office and hands-on community for one-person companies
+### Build solo. Never build alone.
 
-**AI makes it possible for one person to build a company, but a one-person company should not mean working alone.**
+**The virtual office where solo founders build in public, together.**
 
 <br />
 
