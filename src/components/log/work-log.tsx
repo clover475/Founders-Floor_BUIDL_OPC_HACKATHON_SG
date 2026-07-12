@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarClock, Plus, Sprout, TreeDeciduous } from "lucide-react";
+import { CalendarClock, Plus } from "lucide-react";
 import { useLocale, useTranslations } from "use-intl";
 import { useEffect, useMemo, useState } from "react";
+import { AchievementForest, type ForestTree } from "@/components/log/achievement-forest";
 import {
   loadDeskChecks,
   loadSession,
@@ -13,8 +14,6 @@ import {
 import type { DeskCheck, FounderSession, SessionRecord, Ship } from "@/types/domain";
 
 const MILESTONES = [1, 3, 5, 10, 20, 35, 50, 75, 100];
-
-type Tree = { kind: "ship" | "deskCheck"; key: string };
 
 function durationMinutes(startIso: string, endIso: string) {
   const ms = new Date(endIso).getTime() - new Date(startIso).getTime();
@@ -44,7 +43,7 @@ export function WorkLog() {
     [deskChecks],
   );
 
-  const trees = useMemo<Tree[]>(() => {
+  const trees = useMemo<ForestTree[]>(() => {
     const shipTrees = ships.map((ship) => ({ kind: "ship" as const, key: ship.id }));
     const deskCheckTrees = completedDeskChecks.map((check) => ({ kind: "deskCheck" as const, key: check.id }));
     return [...shipTrees, ...deskCheckTrees];
@@ -80,25 +79,7 @@ export function WorkLog() {
 
         {trees.length ? (
           <>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {trees.map((tree) => (
-                <div
-                  key={tree.key}
-                  title={tree.kind === "ship" ? t("treeShipLabel") : t("treeDeskCheckLabel")}
-                  className={`flex h-11 w-11 items-center justify-center border ${
-                    tree.kind === "ship"
-                      ? "border-floor-green bg-floor-panel text-floor-green"
-                      : "border-floor-line bg-white text-floor-blue"
-                  }`}
-                >
-                  {tree.kind === "ship" ? (
-                    <TreeDeciduous size={20} aria-hidden="true" />
-                  ) : (
-                    <Sprout size={18} aria-hidden="true" />
-                  )}
-                </div>
-              ))}
-            </div>
+            <AchievementForest trees={trees} shipLabel={t("treeShipLabel")} deskCheckLabel={t("treeDeskCheckLabel")} />
             {nextMilestone ? (
               <p className="mt-4 text-xs uppercase text-floor-muted">
                 {t("nextMilestone", { count: nextMilestone - trees.length, milestone: nextMilestone })}

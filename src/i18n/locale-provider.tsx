@@ -21,8 +21,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    const detected = navigator.language.toLowerCase().startsWith("zh") ? "zh-CN" : defaultLocale;
-    setLocaleState(isAppLocale(saved) ? saved : detected);
+    setLocaleState(isAppLocale(saved) ? saved : defaultLocale);
   }, []);
 
   useEffect(() => {
