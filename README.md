@@ -9,8 +9,13 @@
 <br />
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Product-111111?style=for-the-badge)](https://founders-floor-buidl-opc-hackathon.vercel.app/)
-[![Demo Video](https://img.shields.io/badge/Demo_Video-Watch-111111?style=for-the-badge)](#)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-111111?style=for-the-badge&logo=github)](https://github.com/clover475/Founders-Floor_BUIDL_OPC_HACKATHON_SG)
+
+<br />
+
+**🏆 Built for BUIDL OPC Hackathon SG**
+
+*Proudly supported by our incredible sponsors and partners (Add sponsor logos/names here)*
 
 </div>
 
