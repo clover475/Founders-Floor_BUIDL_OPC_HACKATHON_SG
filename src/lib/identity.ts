@@ -7,16 +7,17 @@ type StoredIdentity = {
   nickname: string;
 };
 
-function fallbackId() {
-  return `local-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+export function createLocalId(prefix = "local") {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 export function createParticipant(nickname?: string): Participant {
   return {
-    participantId:
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : fallbackId(),
+    participantId: createLocalId(),
     nickname: nickname?.trim() || "Solo founder",
   };
 }

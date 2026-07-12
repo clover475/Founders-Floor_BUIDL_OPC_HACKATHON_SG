@@ -3,7 +3,7 @@
 ## Snapshot
 
 - Current milestone: Vercel-deployed hackathon vertical slice with live Coffee Corner and Elevator Stage
-- Current health: T1 scaffold complete; local vertical slice starts next
+- Current health: T1 and T2 complete; local personal demo flow is working
 - Last updated: 2026-07-12
 
 ## Completed
@@ -17,10 +17,11 @@
 - Decided on Jitsi iframe meetings instead of custom WebRTC.
 - Reduced live concurrency to one four-seat Coffee Corner and one Elevator speaker.
 - T1 complete: created the Next.js App Router, TypeScript, Tailwind, shared shell, domain/realtime types, local identity, demo fixtures, and versioned localStorage repository.
+- T2 complete: implemented Lobby, Clock In, room presence cards, Desk Check, Clock Out, and Ship Wall with local persistence and optional project information.
 
 ## In progress
 
-- T2 personal vertical slice from `docs/tasks.md`.
+- Ready for T3 Coffee Corner live interaction from `docs/tasks.md`.
 
 ## Current issues
 
@@ -30,11 +31,10 @@
 
 ## Next steps
 
-1. Execute T2 from `docs/tasks.md` to establish the personal vertical slice.
-2. Execute T3 for Coffee Corner realtime presence and Jitsi.
-3. Execute T4 for Elevator Stage and audience feedback.
-4. Execute T5 for Vercel deployment and stage hardening.
-5. Record a backup demo and complete OpenArena submission credits before 18:00 SGT.
+1. Execute T3 for Coffee Corner realtime presence and Jitsi.
+2. Execute T4 for Elevator Stage and audience feedback.
+3. Execute T5 for Vercel deployment and stage hardening.
+4. Record a backup demo and complete OpenArena submission credits before 18:00 SGT.
 
 ## Validation
 
@@ -42,5 +42,5 @@
 - Result: Passed.
 - Command: `npm run build`
 - Result: Passed.
-- Manual check: Home page includes a reset demo data control and realtime status handles missing Supabase variables without requiring configuration.
-- Remaining gap: Full Clock In to Ship Wall journey is not implemented until T2.
+- Manual check: Code path supports a new browser journey from `/clock-in` to `/office/[room]`, `/desk-check`, `/clock-out`, and `/ship-wall`; session, desk check, and ship records are stored in versioned localStorage and survive refresh.
+- Remaining gap: Coffee Corner and Elevator Stage remain placeholders until T3/T4.
