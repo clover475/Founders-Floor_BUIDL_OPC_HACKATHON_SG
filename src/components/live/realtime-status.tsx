@@ -1,15 +1,19 @@
+"use client";
+
 import { getRealtimeConfig } from "@/lib/realtime/config";
+import { useTranslations } from "use-intl";
 
 export function RealtimeStatus() {
+  const t = useTranslations("realtime");
   const config = getRealtimeConfig();
 
   return (
     <div className="space-y-3">
-      <p className="text-sm font-semibold text-floor-ink">Live mode</p>
+      <p className="text-sm font-semibold text-floor-ink">{t("title")}</p>
       <p className="text-sm leading-6 text-floor-muted">
         {config.enabled
-          ? "Supabase realtime variables are present. Live rooms can be enabled by later tasks."
-          : "Supabase variables are missing, so the app will use local demo mode without crashing."}
+          ? t("enabled")
+          : t("disabled")}
       </p>
       <div className="flex items-center gap-2 text-xs text-floor-muted">
         <span
@@ -18,7 +22,7 @@ export function RealtimeStatus() {
           }`}
           aria-hidden="true"
         />
-        {config.enabled ? "Configured" : "Local fallback active"}
+        {config.enabled ? t("configured") : t("fallback")}
       </div>
     </div>
   );

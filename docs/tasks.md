@@ -66,3 +66,18 @@ Acceptance:
 - Two-browser production smoke test passes.
 - Core personal flow works after disabling realtime.
 - Backup demo recording and submission checklist are ready.
+
+## T6 — Global launch language switcher
+
+- Add English and Simplified Chinese message catalogs with `use-intl`.
+- Detect Chinese browser locales and remember explicit language choice locally.
+- Translate the complete Clock In, Office, Desk Check, Coffee, Elevator, Clock Out, and Ship Wall flows.
+- Keep one shared URL so social traffic and live room participation are not split by locale.
+
+Acceptance:
+
+- English and Chinese switch immediately from the global navigation.
+- The chosen language survives navigation and refresh.
+- Browser language sets the first-visit default when no preference exists.
+- `npm run build` and `npm run lint` pass.
+- A 390px-wide browser has no horizontal overflow.

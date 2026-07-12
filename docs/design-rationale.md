@@ -38,3 +38,13 @@ The competition theme explicitly emphasizes Agentic Services, while the MVP is p
 - Product scoping: reducing a community vision to a testable vertical loop.
 - FDE-style delivery: adapting architecture to unreliable stage and deadline conditions.
 - Community systems thinking: designing spaces, rituals, contribution, and trust rather than a generic chat feed.
+
+## Why locale switching does not change the URL yet
+
+The launch audience arrives from X, Reddit, and Xiaohongshu, so the first release supports English and Simplified Chinese with one shared URL. The app detects Chinese browser locales, remembers an explicit choice in local storage, and exposes a keyboard-accessible switch in the global navigation.
+
+This uses `use-intl`, the React core package maintained in the high-adoption next-intl project. It gives the app ICU messages and plural handling without forcing a late migration of every route to `/en` and `/zh-CN`.
+
+Trade-off: this release does not provide locale-specific URLs, translated metadata, `hreflang`, or independently indexable language pages. If organic search becomes a meaningful acquisition channel, migrate the same message catalog to next-intl locale routing rather than replacing the translation layer.
+
+Interview framing: under a same-day launch constraint, I separated user-facing localization from international SEO. I shipped the behavior global visitors needed immediately while preserving a clean upgrade path to localized routing.

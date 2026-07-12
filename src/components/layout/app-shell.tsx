@@ -1,14 +1,20 @@
+"use client";
+
 import Link from "next/link";
 import { Coffee, DoorOpen, Presentation, Rows3 } from "lucide-react";
+import { useTranslations } from "use-intl";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 
 const navItems = [
-  { href: "/", label: "Floor", icon: Rows3 },
-  { href: "/coffee-corner", label: "Coffee", icon: Coffee },
-  { href: "/elevator", label: "Elevator", icon: Presentation },
-  { href: "/clock-out", label: "Clock out", icon: DoorOpen },
+  { href: "/", label: "floor", icon: Rows3 },
+  { href: "/coffee-corner", label: "coffee", icon: Coffee },
+  { href: "/elevator", label: "elevator", icon: Presentation },
+  { href: "/clock-out", label: "clockOut", icon: DoorOpen },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("nav");
+
   return (
     <div className="min-h-screen">
       <header className="border-b border-floor-line bg-floor-paper/90">
@@ -26,10 +32,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className="inline-flex items-center gap-2 px-3 py-2 text-sm text-floor-muted transition hover:bg-white hover:text-floor-ink"
                 >
                   <Icon size={16} aria-hidden="true" />
-                  <span className="hidden sm:inline">{item.label}</span>
+                  <span className="hidden sm:inline">{t(item.label)}</span>
                 </Link>
               );
             })}
+            <LanguageSwitcher />
           </div>
         </nav>
       </header>

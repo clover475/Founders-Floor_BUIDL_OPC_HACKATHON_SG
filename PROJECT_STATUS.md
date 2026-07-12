@@ -2,8 +2,8 @@
 
 ## Snapshot
 
-- Current milestone: Vercel-deployed hackathon vertical slice with live Coffee Corner and Elevator Stage
-- Current health: T1, T2, and production two-browser Coffee/Elevator realtime smoke tests passed; T3 fifth-seat cap still needs a real five-device check; T4 correction passed production two-browser smoke testing; T5 production deployment path is accepted for the hackathon demo
+- Current milestone: Global-ready public launch candidate with live Coffee Corner and Elevator Stage
+- Current health: T1-T5 and production two-browser Coffee/Elevator realtime smoke tests passed; T6 English/Chinese localization passes local automated and browser checks; T3 fifth-seat cap still needs a real five-device check
 - Last updated: 2026-07-12
 
 ## Completed
@@ -27,6 +27,7 @@
 - Backend boundary reconfirmed: keep the Supabase configuration/client seam and local repository abstraction, but do not add database tables, authentication, or server APIs during the hackathon. A persistent backend can be added after the interaction is validated.
 - Deployment env compatibility added: `next.config.ts` maps Supabase Vercel integration variables (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_ANON_KEY`) into the browser-facing `NEXT_PUBLIC_SUPABASE_*` values at build time.
 - T4 correction complete: Elevator speaker Presence now carries active round metadata for late join recovery, stale or expired speaker Presence no longer blocks the stage, and end/reset/timeout paths release the local speaker role back to audience.
+- T6 complete: added English and Simplified Chinese catalogs using `use-intl`, browser-language detection, persistent manual switching, localized core product flows, locale-aware Ship Wall dates, and a mobile-safe global language control.
 
 ## In progress
 
@@ -43,8 +44,8 @@
 
 ## Next steps
 
-1. Record the backup demo using `docs/stage-checklist.md`.
-2. Complete OpenArena submission credits before 18:00 SGT.
+1. Push T6 and let Vercel redeploy the production site.
+2. Repeat language switching and the Coffee/Elevator smoke test on the production URL.
 3. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
 
 ## Validation
@@ -65,3 +66,5 @@
 - T4 correction validation: `npm run lint` passed; `npm run build` passed. Static review confirms speaker Presence includes active round metadata, `round_started.endsAt` requires a valid date, late joiners can recover live rounds from Presence sync, and end/reset/timeout paths release the local speaker role.
 - Production validation: homepage showed `Configured` and no local fallback. Coffee Corner passed two-browser realtime sync: both browsers connected, seat count moved from 0/4 to 1/4 to 2/4, both saw the same deterministic Jitsi room, and both loaded an iframe. Elevator Stage passed two-browser realtime sync: one browser started a round, the other saw the live pitch, joined as audience, submitted feedback, and the speaker result card updated to 1 understood / 1 follow-up / 1 user signal with the audience question. Reset returned both browsers to Stage open, and the second browser successfully started a new round.
 - Remaining gap: Coffee Corner fifth-seat cap has not been tested with five isolated identities in production.
+- T6 validation: `npm run lint` passed; `npm run build` passed; translation hard-code scan found only brand metadata, the name example, and the language control labels. Browser validation confirmed English-to-Chinese and Chinese-to-English switching, Chinese preference persistence across navigation, translated Coffee Corner content, and a 390px Clock In layout with `scrollWidth` equal to `innerWidth`.
+- T6 remaining gap: production Vercel redeploy and production-language smoke test are still pending.

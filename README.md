@@ -22,6 +22,7 @@ The hackathon uses a strict Fresh Code Rule. All submitted code must be written 
 - Local browser storage for the personal demo journey
 - Supabase Realtime for live presence, room state, and audience feedback
 - Jitsi iframe meetings for Coffee Corner and Elevator Stage
+- English and Simplified Chinese interface powered by `use-intl`
 - Vercel deployment
 
 No login, database tables, custom WebRTC, complex matching, or AI agent is required for the MVP.
@@ -110,3 +111,4 @@ Third-party libraries and services used in the MVP:
 - Supabase Realtime Presence and Broadcast for ephemeral Coffee Corner seats and Elevator Stage feedback.
 - Jitsi Meet iframe URLs for live Coffee Corner and Elevator Stage conversation.
 - Lucide React for interface icons.
+- `use-intl`, the React core package from the next-intl project, for ICU message formatting and locale context.

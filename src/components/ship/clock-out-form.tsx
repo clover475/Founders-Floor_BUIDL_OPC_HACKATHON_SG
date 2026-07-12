@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { DoorOpen } from "lucide-react";
+import { useTranslations } from "use-intl";
 import { useEffect, useState } from "react";
 import { createLocalId } from "@/lib/identity";
 import { clearSession, loadSession, loadShips, saveShips } from "@/lib/storage/repository";
 import type { FounderSession } from "@/types/domain";
 
 export function ClockOutForm() {
+  const t = useTranslations("clockOut");
   const router = useRouter();
   const [session, setSession] = useState<FounderSession | null>(null);
   const [title, setTitle] = useState("");
@@ -35,7 +37,7 @@ export function ClockOutForm() {
         id: createLocalId("ship"),
         sessionId: session.sessionId,
         title: title.trim() || session.goal,
-        evidence: evidence.trim() || "Progress submitted from Founders' Floor.",
+        evidence: evidence.trim() || t("defaultEvidence"),
         helpedBy: helpedBy.trim() || undefined,
         room: session.room,
         shippedAt: new Date().toISOString(),
@@ -50,8 +52,8 @@ export function ClockOutForm() {
     return (
       <div className="mx-auto max-w-3xl px-5 py-8 sm:px-8">
         <div className="border border-floor-line bg-white/80 p-5">
-          <h1 className="text-2xl font-semibold text-floor-ink">No active clock-in</h1>
-          <p className="mt-2 text-sm text-floor-muted">Clock in first, then return to ship progress.</p>
+          <h1 className="text-2xl font-semibold text-floor-ink">{t("noneTitle")}</h1>
+          <p className="mt-2 text-sm text-floor-muted">{t("noneDescription")}</p>
         </div>
       </div>
     );
@@ -60,16 +62,15 @@ export function ClockOutForm() {
   return (
     <form onSubmit={onSubmit} className="mx-auto grid w-full max-w-3xl gap-5 px-5 py-8 sm:px-8">
       <section className="space-y-2">
-        <p className="text-sm font-medium text-floor-green">Clock Out</p>
-        <h1 className="text-3xl font-semibold text-floor-ink">Ship one thing</h1>
+        <p className="text-sm font-medium text-floor-green">{t("eyebrow")}</p>
+        <h1 className="text-3xl font-semibold text-floor-ink">{t("title")}</h1>
         <p className="text-sm leading-6 text-floor-muted">
-          Record the concrete progress from this work session. A link is useful,
-          but a decision or sharper sentence also counts.
+          {t("description")}
         </p>
       </section>
 
       <label htmlFor="ship-title" className="text-sm font-medium text-floor-ink">
-        What did you ship?
+        {t("what")}
       </label>
       <input
         id="ship-title"
@@ -79,25 +80,25 @@ export function ClockOutForm() {
       />
 
       <label htmlFor="ship-evidence" className="text-sm font-medium text-floor-ink">
-        Evidence
+        {t("evidence")}
       </label>
       <textarea
         id="ship-evidence"
         value={evidence}
         onChange={(event) => setEvidence(event.target.value)}
-        placeholder="Paste a link, note the change, or describe the decision"
+        placeholder={t("evidencePlaceholder")}
         rows={4}
         className="border border-floor-line bg-white px-3 py-3 text-sm outline-none focus:border-floor-green"
       />
 
       <label htmlFor="helped-by" className="text-sm font-medium text-floor-ink">
-        Who helped, optional
+        {t("helpedBy")}
       </label>
       <input
         id="helped-by"
         value={helpedBy}
         onChange={(event) => setHelpedBy(event.target.value)}
-        placeholder="Mia, Alex, or the Feedback Room"
+        placeholder={t("helpedPlaceholder")}
         className="min-h-12 border border-floor-line bg-white px-3 text-sm outline-none focus:border-floor-green"
       />
 
@@ -106,7 +107,7 @@ export function ClockOutForm() {
         className="inline-flex min-h-12 items-center justify-center gap-2 bg-floor-ink px-4 text-sm font-medium text-white"
       >
         <DoorOpen size={16} aria-hidden="true" />
-        Clock out and publish to Ship Wall
+        {t("publish")}
       </button>
     </form>
   );

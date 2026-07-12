@@ -1,45 +1,33 @@
 "use client";
 
 import { Coffee, LogOut, UsersRound } from "lucide-react";
+import { useTranslations } from "use-intl";
 import { JitsiMeeting } from "@/components/live/jitsi-meeting";
 import { getCoffeeJitsiRoomName, getJitsiMeetingUrl } from "@/lib/live/jitsi";
 import { useCoffeePresence } from "@/lib/realtime/use-coffee-presence";
 
-function statusCopy(status: ReturnType<typeof useCoffeePresence>["status"]) {
-  if (status === "connected") {
-    return "Live table connected.";
-  }
-
-  if (status === "connecting") {
-    return "Connecting to the live table.";
-  }
-
-  if (status === "error") {
-    return "Live table had a connection issue. The meeting link still works.";
-  }
-
-  if (status === "demo") {
-    return "Local demo mode. Supabase variables are not configured.";
-  }
-
-  return "Ready to join.";
-}
-
 export function CoffeeCorner() {
+  const t = useTranslations("coffee");
   const coffee = useCoffeePresence();
   const roomName = getCoffeeJitsiRoomName();
   const meetingUrl = getJitsiMeetingUrl(roomName);
   const emptySeats = Math.max(coffee.capacity - coffee.participants.length, 0);
+  const statusCopy = {
+    connected: t("connected"),
+    connecting: t("connecting"),
+    error: t("errorStatus"),
+    demo: t("demo"),
+    idle: t("ready"),
+  }[coffee.status];
 
   return (
     <main className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[0.38fr_0.62fr]">
       <section className="space-y-5">
         <div className="space-y-2">
-          <p className="text-sm font-medium text-floor-green">Coffee Corner</p>
-          <h1 className="text-3xl font-semibold text-floor-ink">Four seats for a quick break</h1>
+          <p className="text-sm font-medium text-floor-green">{t("eyebrow")}</p>
+          <h1 className="text-3xl font-semibold text-floor-ink">{t("title")}</h1>
           <p className="text-sm leading-6 text-floor-muted">
-            Join the public table when you want a short live conversation. This
-            room is for casual founder talk, not private information.
+            {t("description")}
           </p>
         </div>
 
@@ -47,30 +35,30 @@ export function CoffeeCorner() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-floor-ink">
-                {coffee.participants.length}/{coffee.capacity} seats filled
+                {t("filled", { count: coffee.participants.length, capacity: coffee.capacity })}
               </p>
-              <p className="mt-1 text-sm text-floor-muted">{emptySeats} seats open</p>
+              <p className="mt-1 text-sm text-floor-muted">{t("open", { count: emptySeats })}</p>
             </div>
             <UsersRound size={22} className="text-floor-green" aria-hidden="true" />
           </div>
-          <p className="mt-4 text-sm leading-6 text-floor-muted">{statusCopy(coffee.status)}</p>
+          <p className="mt-4 text-sm leading-6 text-floor-muted">{statusCopy}</p>
         </div>
 
         {coffee.status === "connecting" ? (
           <div className="border border-floor-line bg-floor-panel p-3 text-sm text-floor-muted">
-            Watching the live seat state before you join.
+            {t("watching")}
           </div>
         ) : null}
 
         {coffee.status === "error" ? (
           <div className="border border-floor-line bg-white p-3 text-sm text-floor-muted">
-            Realtime is disconnected. The meeting room can still open, and the personal demo flow is unaffected.
+            {t("disconnected")}
           </div>
         ) : null}
 
         {coffee.tableFull ? (
           <div className="border border-floor-line bg-white p-3 text-sm text-floor-muted">
-            The four-seat table is full. Stay on this page to watch for an open seat.
+            {t("fullNotice")}
           </div>
         ) : null}
 
@@ -80,10 +68,10 @@ export function CoffeeCorner() {
             return (
               <div key={participant?.participantId ?? index} className="border border-floor-line bg-white/70 p-3">
                 <p className="text-sm font-medium text-floor-ink">
-                  {participant ? participant.nickname : `Open seat ${index + 1}`}
+                  {participant ? participant.nickname : t("openSeat", { number: index + 1 })}
                 </p>
                 <p className="mt-1 text-xs uppercase text-floor-muted">
-                  {participant ? "joined" : "available"}
+                  {participant ? t("joined") : t("available")}
                 </p>
               </div>
             );
@@ -97,7 +85,7 @@ export function CoffeeCorner() {
             className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-floor-line bg-white px-4 text-sm font-medium text-floor-ink"
           >
             <LogOut size={16} aria-hidden="true" />
-            Leave table
+            {t("leave")}
           </button>
         ) : (
           <button
@@ -107,7 +95,7 @@ export function CoffeeCorner() {
             className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-floor-ink px-4 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-floor-muted"
           >
             <Coffee size={16} aria-hidden="true" />
-            {coffee.tableFull ? "Table full" : "Join Coffee Corner"}
+            {coffee.tableFull ? t("full") : t("join")}
           </button>
         )}
       </section>
@@ -118,12 +106,11 @@ export function CoffeeCorner() {
         ) : (
           <div className="grid min-h-[520px] place-items-center border border-floor-line bg-white/70 p-6 text-center">
             <div className="max-w-md">
-              <p className="text-lg font-semibold text-floor-ink">Join to open the live table</p>
+              <p className="text-lg font-semibold text-floor-ink">{t("joinTitle")}</p>
               <p className="mt-2 text-sm leading-6 text-floor-muted">
-                The meeting is embedded only after you take a seat. The same
-                deterministic room is used by every participant for this event.
+                {t("joinDescription")}
               </p>
-              <p className="mt-5 break-all text-xs text-floor-muted">Room: {roomName}</p>
+              <p className="mt-5 break-all text-xs text-floor-muted">{t("room", { room: roomName })}</p>
             </div>
           </div>
         )}
