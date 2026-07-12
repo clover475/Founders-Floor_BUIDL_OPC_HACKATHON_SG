@@ -71,10 +71,19 @@
   },
   "coffee": {
     "eyebrow": "Coffee Corner",
-    "title": "Four seats for a quick break",
-    "description": "Join the public table when you want a short live conversation. This room is for casual founder talk, not private information.",
+    "title": "Choose a small voice room",
+    "description": "Pick a public coffee room, set a topic if you are first, then join a short founder conversation.",
+    "rooms": {
+      "founder-lounge": { "name": "Founder Lounge", "description": "Open casual talk for solo founders who just want coworkers nearby." },
+      "ai-builders": { "name": "AI Builders", "description": "Talk about agents, product ideas, tooling, and what you are building today." },
+      "first-users": { "name": "First Users", "description": "Discuss user testing, launch, distribution, and early customer feedback." },
+      "quiet-build": { "name": "Quiet Build Table", "description": "A calmer room for light coworking and short check-ins." }
+    },
     "filled": "{count}/{capacity} seats filled",
     "open": "{count, plural, =0 {No seats open} =1 {# seat open} other {# seats open}}",
+    "nameRoom": "Name this room",
+    "editLiveRoom": "Update this room topic",
+    "topicPlaceholder": "What are you talking about?",
     "connected": "Live table connected.",
     "connecting": "Connecting to the live table.",
     "errorStatus": "Live table had a connection issue. The meeting link still works.",
@@ -90,7 +99,7 @@
     "full": "Table full",
     "join": "Join Coffee Corner",
     "joinTitle": "Join to open the live table",
-    "joinDescription": "The meeting is embedded only after you take a seat. The same deterministic room is used by every participant for this event.",
+    "joinDescription": "The meeting is embedded only after you take a seat. Each coffee room has its own deterministic meeting link.",
     "room": "Room: {room}"
   },
   "elevator": {
@@ -131,6 +140,7 @@
     "saved": "Saved",
     "save": "Save result",
     "reset": "Reset stale round",
+    "stageIdle": "Stage waiting",
     "joinTitle": "Join the stage to open the room",
     "joinDescription": "Speakers and audience use the same deterministic Jitsi room for this event.",
     "room": "Room: {room}",

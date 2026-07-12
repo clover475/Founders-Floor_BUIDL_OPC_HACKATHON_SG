@@ -29,7 +29,7 @@
 - Use accessible semantic controls and keyboard-friendly interactions.
 - Do not collect personal contact data in the demo.
 - Treat realtime events as ephemeral; never make the core Clock In to Ship flow depend on another participant.
-- Only one public Coffee Corner and one Elevator Stage exist in the MVP.
+- Multiple predefined public Coffee rooms and one Elevator Stage exist in the MVP.
 - Credit all third-party libraries and assets in `README.md`.
 
 ## Planned commands

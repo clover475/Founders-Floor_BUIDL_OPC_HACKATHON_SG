@@ -96,3 +96,21 @@ Acceptance:
 - A visitor without a Clock In session can browse rooms without being tracked as a live coworker.
 - A clocked-in local user appears in their selected room with a local fallback badge when realtime is unavailable.
 - Demo coworkers remain visibly marked as demo.
+
+## T8 — Launch UX repair for room navigation and coffee rooms
+
+- Make homepage Office Room cards clickable entry points.
+- Remove the internal realtime configuration card from the public homepage.
+- Change Coffee Corner from one implied table to a list of predefined public voice rooms.
+- Give each coffee room its own Presence channel and deterministic Jitsi room.
+- Let the first/active participant set an ephemeral room title/topic through Presence.
+- Reduce the empty Elevator Stage meeting placeholder and label it as a waiting state.
+
+Acceptance:
+
+- `npm run build` and `npm run lint` pass.
+- Homepage cards navigate to `/office/[room]`.
+- Homepage no longer shows the Supabase/realtime configuration card.
+- Coffee Corner lets users choose among multiple rooms before joining.
+- Selecting a coffee room changes the deterministic Jitsi room id.
+- Elevator Stage no-role state is clearly labelled instead of appearing as unexplained empty space.

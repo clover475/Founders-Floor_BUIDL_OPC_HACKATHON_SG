@@ -2,8 +2,8 @@
 
 ## Snapshot
 
-- Current milestone: Global-ready public launch candidate with live Office Floor, Coffee Corner, and Elevator Stage
-- Current health: T1-T6 passed their local checks; T7 live Office Floor presence is deployed and single-browser production validation passed; T3 fifth-seat cap still needs a real five-device check
+- Current milestone: Global-ready public launch candidate with clickable Office Rooms, multi-room Coffee Corner, and Elevator Stage
+- Current health: T1-T8 pass local lint/build checks; T8 launch UX repairs are implemented locally and need Vercel deployment validation; Coffee fifth-seat cap still needs a real five-device check
 - Last updated: 2026-07-12
 
 ## Completed
@@ -29,6 +29,7 @@
 - T4 correction complete: Elevator speaker Presence now carries active round metadata for late join recovery, stale or expired speaker Presence no longer blocks the stage, and end/reset/timeout paths release the local speaker role back to audience.
 - T6 complete: added English and Simplified Chinese catalogs using `use-intl`, browser-language detection, persistent manual switching, localized core product flows, locale-aware Ship Wall dates, and a mobile-safe global language control.
 - T7 complete: added `floor:lobby:{eventSlug}` Supabase Presence for ordinary Office Rooms, observer-only browsing for visitors without an active Clock In session, real coworker cards ahead of seeded examples, and explicit live/local/demo badges so public users can distinguish real participants from fallback data.
+- T8 complete: made homepage room cards clickable, removed the internal realtime status card from the public homepage, changed Coffee Corner into a selectable list of predefined voice rooms with independent Presence/Jitsi room ids, added ephemeral room title/topic editing for active coffee sessions, and reduced the Elevator Stage empty placeholder into an explicit waiting state.
 
 ## In progress
 
@@ -45,10 +46,11 @@
 
 ## Next steps
 
-1. Run a two-browser Office Floor presence smoke test.
-2. Run the public-launch safety pass before broad social distribution.
-3. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
-4. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
+1. Deploy T8 to Vercel and smoke test homepage navigation, Coffee room selection, and Elevator waiting state.
+2. Run a two-browser Office Floor and Coffee room presence smoke test.
+3. Run the public-launch safety pass before broad social distribution.
+4. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
+5. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
 
 ## Validation
 
@@ -73,3 +75,5 @@
 - T7 validation: `npm run lint` passed; `npm run build` passed. Local browser validation on port 3007 confirmed that a visitor without an active Clock In session sees only demo-marked seeded coworkers, and a clocked-in user appears in the selected room with a local fallback badge when Supabase variables are unavailable locally.
 - T7 production validation: Vercel deployed commit `31331c9`; `/office/idea` showed `LIVE FLOOR CONNECTED` and demo-marked seeded coworkers. A production Clock In showed the current browser as `LIVE` in Idea Room and kept seeded coworkers marked `DEMO`.
 - T7 remaining gap: two isolated browsers/devices have not yet been used to confirm that two distinct Office Floor participants see each other within five seconds.
+- T8 validation: `npm run lint` passed; `npm run build` passed. Local browser validation on port 3008 confirmed homepage Office Room cards are links to `/office/[room]`, the Supabase realtime status card is removed from the homepage, Coffee Corner shows four selectable voice rooms, selecting the AI Builder room changes the deterministic meeting room to `coffee-ai-builders`, and Elevator Stage shows a clear waiting label instead of an unexplained blank panel.
+- T8 remaining gap: production deployment and multi-device validation have not been run yet.

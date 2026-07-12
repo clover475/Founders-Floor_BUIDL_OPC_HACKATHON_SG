@@ -12,6 +12,9 @@ export type FloorPresence = {
 export type CoffeePresence = {
   participantId: string;
   nickname: string;
+  roomId: string;
+  roomTitle?: string;
+  roomTopic?: string;
   joinedAt: string;
 };
 

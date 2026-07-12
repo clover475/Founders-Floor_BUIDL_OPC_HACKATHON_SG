@@ -30,10 +30,11 @@ No application database, server actions, custom API routes, or authentication ar
 
 ### Coffee Corner
 
-- Exactly one shared public table in the MVP.
-- Capacity shown as four seats; joining after four displays “table full”.
+- Multiple predefined public coffee rooms exist in the MVP.
+- Each room is a separate four-seat public table; joining after four displays “table full”.
 - Presence payload identifies each browser by a locally generated UUID and nickname.
-- Participants join one deterministic Jitsi room derived from `NEXT_PUBLIC_EVENT_SLUG`.
+- Participants join one deterministic Jitsi room derived from `NEXT_PUBLIC_EVENT_SLUG` and the selected coffee room id.
+- The first participant can set the visible room title/topic for the current live session. This is carried through Presence and disappears after everyone leaves because there is no database in the MVP.
 - Audio starts muted to avoid venue feedback; users explicitly unmute.
 - Leaving the page untracks presence and disposes the meeting iframe.
 
@@ -143,6 +144,9 @@ Presence payload:
 type CoffeePresence = {
   participantId: string;
   nickname: string;
+  roomId: string;
+  roomTitle?: string;
+  roomTopic?: string;
   joinedAt: string;
 };
 ```

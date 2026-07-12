@@ -23,6 +23,7 @@ Solo founders already have abundant AI execution help. The differentiated hypoth
 - Local-first data sacrifices authentic cross-device presence for demo reliability.
 - Seeded members create immediate atmosphere but must be labelled as demo data.
 - The broad long-term community vision is intentionally hidden behind one daily ritual.
+- Coffee rooms are predefined and ephemeral instead of persisted. This gives public users a clear “pick a voice room” experience without adding accounts, database tables, moderation flows, or cleanup jobs during the hackathon build.
 
 ## Known weakness
 

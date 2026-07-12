@@ -20,6 +20,7 @@ function isCoffeePresence(value: unknown): value is CoffeePresence {
   return (
     typeof candidate.participantId === "string" &&
     typeof candidate.nickname === "string" &&
+    typeof candidate.roomId === "string" &&
     typeof candidate.joinedAt === "string"
   );
 }
@@ -31,7 +32,7 @@ function flattenPresenceState(state: Record<string, unknown[]>): CoffeePresence[
     .sort((a, b) => a.joinedAt.localeCompare(b.joinedAt));
 }
 
-export function useCoffeePresence() {
+export function useCoffeePresence(roomId = "main", roomTitle = "", roomTopic = "") {
   const config = useMemo(() => getRealtimeConfig(), []);
   const client = useMemo(() => getSupabaseBrowserClient(), []);
   const channelRef = useRef<RealtimeChannel | null>(null);
@@ -46,10 +47,18 @@ export function useCoffeePresence() {
     (): CoffeePresence => ({
       participantId: participant.participantId,
       nickname: participant.nickname,
+      roomId,
+      roomTitle: roomTitle.trim() || undefined,
+      roomTopic: roomTopic.trim() || undefined,
       joinedAt: new Date().toISOString(),
     }),
-    [participant.nickname, participant.participantId],
+    [participant.nickname, participant.participantId, roomId, roomTitle, roomTopic],
   );
+  const createLocalPresenceRef = useRef(createLocalPresence);
+
+  useEffect(() => {
+    createLocalPresenceRef.current = createLocalPresence;
+  }, [createLocalPresence]);
 
   const tableFull = participants.length >= COFFEE_CAPACITY && !joined;
 
@@ -107,7 +116,7 @@ export function useCoffeePresence() {
       return;
     }
 
-    const channel = client.channel(`floor:coffee:${config.eventSlug}`, {
+    const channel = client.channel(`floor:coffee:${config.eventSlug}:${roomId}`, {
       config: {
         presence: {
           key: participant.participantId,
@@ -138,7 +147,7 @@ export function useCoffeePresence() {
 
         if (pendingJoinRef.current) {
           pendingJoinRef.current = false;
-          await channel.track(createLocalPresence());
+          await channel.track(createLocalPresenceRef.current());
         }
       }
 
@@ -149,7 +158,17 @@ export function useCoffeePresence() {
 
     channelRef.current = channel;
     setStatus("connecting");
-  }, [client, config.enabled, config.eventSlug, createLocalPresence, participant.participantId]);
+  }, [client, config.enabled, config.eventSlug, participant.participantId, roomId]);
+
+  useEffect(() => {
+    if (!joined || !channelRef.current) {
+      return;
+    }
+
+    void channelRef.current.track(createLocalPresence()).catch(() => {
+      setStatus("error");
+    });
+  }, [createLocalPresence, joined]);
 
   useEffect(() => {
     return () => {

@@ -8,9 +8,9 @@ function sanitizeRoomSegment(value: string) {
     .replace(/^-|-$/g, "");
 }
 
-export function getCoffeeJitsiRoomName() {
+export function getCoffeeJitsiRoomName(roomId = "main") {
   const { eventSlug } = getRealtimeConfig();
-  return `founders-floor-${sanitizeRoomSegment(eventSlug)}-coffee`;
+  return `founders-floor-${sanitizeRoomSegment(eventSlug)}-coffee-${sanitizeRoomSegment(roomId)}`;
 }
 
 export function getElevatorJitsiRoomName() {

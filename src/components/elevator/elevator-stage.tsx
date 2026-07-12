@@ -253,9 +253,10 @@ export function ElevatorStage() {
         {elevator.role ? (
           <JitsiMeeting roomName={roomName} meetingUrl={meetingUrl} title={t("meetingTitle")} />
         ) : (
-          <div className="grid min-h-[520px] place-items-center border border-floor-line bg-white/70 p-6 text-center">
+          <div className="grid min-h-[320px] place-items-center border border-floor-line bg-white/70 p-6 text-center">
             <div className="max-w-md">
-              <p className="text-lg font-semibold text-floor-ink">{t("joinTitle")}</p>
+              <p className="text-sm font-medium uppercase text-floor-green">{t("stageIdle")}</p>
+              <p className="mt-2 text-lg font-semibold text-floor-ink">{t("joinTitle")}</p>
               <p className="mt-2 text-sm leading-6 text-floor-muted">
                 {t("joinDescription")}
               </p>
