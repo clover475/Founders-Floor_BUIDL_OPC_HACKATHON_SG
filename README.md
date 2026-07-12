@@ -37,10 +37,48 @@ No login, database tables, custom WebRTC, complex matching, or AI agent is requi
 | `/desk-check` | Request or accept quick help |
 | `/coffee-corner` | Join the shared four-seat live coffee table |
 | `/elevator` | Join a live pitch stage or audience |
+| `/pitch-coach` | **AI Elevator Pitch Coach** (solo practice) |
 | `/clock-out` | Submit a concrete outcome |
 | `/ship-wall` | Celebrate work shipped today |
 
-## Local setup
+## AI Elevator Pitch Coach
+
+`/pitch-coach` is a solo practice tool that lets a founder:
+
+1. **Record** up to 45 seconds of video using the browser camera.
+2. **Get a transcript** — the browser's native `SpeechRecognition` API auto-transcribes while recording. The transcript is always editable so the founder can correct or paste text manually.
+3. **Analyse** — click **Analyse My Pitch** to POST the transcript to `/api/analyse-pitch`.
+4. **Receive structured AI feedback**:
+   - *What I Understood* — one sentence summary from a listener's perspective
+   - *Message Structure* — four elements rated clear / partial / missing: Target User, Problem, Solution, Call to Action
+   - *One Thing to Improve* — a single priority action for the next attempt
+   - *Suggested 30-Second Pitch* — an AI rewrite that preserves the founder's facts
+5. **Delivery Snapshot** — local metrics computed without any API: duration, word count, and filler-word count (supports both Chinese and English fillers).
+6. **Try Again** — reset and re-record immediately.
+
+### Real AI vs Demo Mode
+
+| Condition | Behaviour |
+|---|---|
+| `OPENAI_API_KEY` is set | Real GPT analysis via `/api/analyse-pitch` |
+| `OPENAI_API_KEY` is missing | Fixed example feedback with a visible **Demo Mode** banner |
+
+The demo result is never presented as real AI output. The banner reads: *"No OPENAI_API_KEY is configured. The feedback below is a fixed example and does not reflect your actual pitch."*
+
+### Environment variables for AI Coach
+
+Add to Vercel Project Settings → Environment Variables (server-side only, never prefixed `NEXT_PUBLIC_`):
+
+```text
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini   # optional, defaults to gpt-4o-mini
+```
+
+### What is NOT implemented (by design)
+
+MediaPipe, face/emotion detection, gaze tracking, Whisper, FFmpeg, video upload, persistent storage, login, or scoring numbers.
+
+
 
 ```bash
 npm install

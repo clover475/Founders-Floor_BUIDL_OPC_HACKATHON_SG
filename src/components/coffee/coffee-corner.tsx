@@ -133,11 +133,6 @@ export function CoffeeCorner() {
           {Array.from({ length: coffee.capacity }).map((_, index) => {
             const participant = coffee.participants[index];
             const isOccupied = Boolean(participant);
-            const isMe = participant?.participantId === undefined
-              ? false
-              : coffee.joined && index === coffee.participants.findIndex(
-                  (p) => p.participantId === participant.participantId,
-                );
 
             if (isOccupied) {
               // Occupied seat — read-only display
