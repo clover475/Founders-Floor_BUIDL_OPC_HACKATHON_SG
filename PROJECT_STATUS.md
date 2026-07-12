@@ -12,14 +12,14 @@
 - Reviewed the Hackathon MVP V1.0 product specification.
 - Chosen a single-app, local-first architecture.
 - Defined the demo-critical vertical flow and non-goals.
+- Created and pushed the public repository: https://github.com/clover475/founders-floor
 
 ## In progress
 
-- Creating the public GitHub repository and initial compliant commit history.
+- Preparing to scaffold and implement the application during the hacking window.
 
 ## Current issues
 
-- GitHub CLI authentication for `clover475` is expired and must be refreshed before remote creation.
 - Exact on-stage pitch duration has not been announced.
 - Product code must not be backdated or imported from an earlier codebase.
 
