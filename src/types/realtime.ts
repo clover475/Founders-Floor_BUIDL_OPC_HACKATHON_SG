@@ -20,6 +20,12 @@ export type ElevatorPresence = {
   nickname: string;
   role: "speaker" | "audience";
   joinedAt: string;
+  activeRound?: {
+    roundId: string;
+    speakerId: string;
+    pitch: string;
+    endsAt: string;
+  };
 };
 
 export type PitchFeedbackInput = {

@@ -24,11 +24,32 @@ type ElevatorRound = {
   ended: boolean;
 };
 
+type ActiveRoundPresence = NonNullable<ElevatorPresence["activeRound"]>;
+
 export type PitchFeedbackResult = PitchFeedbackInput & {
   participantId: string;
   nickname: string;
   submittedAt: string;
 };
+
+function isValidDateString(value: string) {
+  return Number.isFinite(new Date(value).getTime());
+}
+
+function isActiveRoundPresence(value: unknown): value is ActiveRoundPresence {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<ActiveRoundPresence>;
+  return (
+    typeof candidate.roundId === "string" &&
+    typeof candidate.speakerId === "string" &&
+    typeof candidate.pitch === "string" &&
+    typeof candidate.endsAt === "string" &&
+    isValidDateString(candidate.endsAt)
+  );
+}
 
 function isElevatorPresence(value: unknown): value is ElevatorPresence {
   if (!value || typeof value !== "object") {
@@ -36,12 +57,17 @@ function isElevatorPresence(value: unknown): value is ElevatorPresence {
   }
 
   const candidate = value as Partial<ElevatorPresence>;
-  return (
+  const hasValidBase =
     typeof candidate.participantId === "string" &&
     typeof candidate.nickname === "string" &&
     (candidate.role === "speaker" || candidate.role === "audience") &&
-    typeof candidate.joinedAt === "string"
-  );
+    typeof candidate.joinedAt === "string";
+
+  if (!hasValidBase) {
+    return false;
+  }
+
+  return candidate.activeRound === undefined || isActiveRoundPresence(candidate.activeRound);
 }
 
 function flattenPresenceState(state: Record<string, unknown[]>): ElevatorPresence[] {
@@ -76,7 +102,8 @@ function isElevatorEvent(value: unknown): value is ElevatorEvent {
       typeof candidate.roundId === "string" &&
       typeof candidate.speakerId === "string" &&
       typeof candidate.pitch === "string" &&
-      typeof candidate.endsAt === "string"
+      typeof candidate.endsAt === "string" &&
+      isValidDateString(candidate.endsAt)
     );
   }
 
@@ -93,19 +120,23 @@ function isElevatorEvent(value: unknown): value is ElevatorEvent {
 
 function createRound(roundId: string, speakerId: string, speakerName: string, pitch: string, endsAt: string) {
   const endTime = new Date(endsAt).getTime();
-  const startedAt = Number.isFinite(endTime)
-    ? new Date(endTime - ROUND_SECONDS * 1000).toISOString()
-    : new Date().toISOString();
+  if (!Number.isFinite(endTime)) {
+    return null;
+  }
 
   return {
     roundId,
     speakerId,
     speakerName,
     pitch,
-    startedAt,
+    startedAt: new Date(endTime - ROUND_SECONDS * 1000).toISOString(),
     endsAt,
     ended: false,
   };
+}
+
+function isRoundLive(round: ActiveRoundPresence) {
+  return new Date(round.endsAt).getTime() > Date.now();
 }
 
 export function useElevatorStage() {
@@ -125,13 +156,15 @@ export function useElevatorStage() {
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [saved, setSaved] = useState(false);
 
-  const activeSpeaker = participants.find((item) => item.role === "speaker");
+  const activeSpeaker = participants.find(
+    (item) => item.role === "speaker" && item.activeRound && isRoundLive(item.activeRound),
+  );
   const audienceCount = participants.filter((item) => item.role === "audience").length;
-  const isSpeaker = role === "speaker";
+  const isSpeaker = role === "speaker" || currentRound?.speakerId === participant.participantId;
   const speakerBlocked = Boolean(activeSpeaker && activeSpeaker.participantId !== participant.participantId);
 
   const trackRole = useCallback(
-    async (nextRole: ElevatorRole) => {
+    async (nextRole: ElevatorRole, activeRound?: ActiveRoundPresence) => {
       roleRef.current = nextRole;
       setRole(nextRole);
 
@@ -140,6 +173,7 @@ export function useElevatorStage() {
         nickname: participant.nickname,
         role: nextRole,
         joinedAt: new Date().toISOString(),
+        ...(activeRound ? { activeRound } : {}),
       };
 
       if (!config.enabled || !client) {
@@ -191,7 +225,6 @@ export function useElevatorStage() {
         return;
       }
 
-      await trackRole("speaker");
       const roundId = createLocalId("round");
       const endsAt = new Date(Date.now() + ROUND_SECONDS * 1000).toISOString();
       const nextRound = createRound(
@@ -201,11 +234,20 @@ export function useElevatorStage() {
         cleanPitch,
         endsAt,
       );
+      if (!nextRound) {
+        return;
+      }
 
       setCurrentRound(nextRound);
       currentRoundRef.current = nextRound;
       setFeedback([]);
       setSaved(false);
+      await trackRole("speaker", {
+        roundId,
+        speakerId: participant.participantId,
+        pitch: cleanPitch,
+        endsAt,
+      });
       await broadcastEvent({
         type: "round_started",
         roundId,
@@ -259,7 +301,10 @@ export function useElevatorStage() {
     setCurrentRound(endedRound);
     currentRoundRef.current = endedRound;
     await broadcastEvent({ type: "round_ended", roundId: round.roundId });
-  }, [broadcastEvent]);
+    if (round.speakerId === participant.participantId) {
+      await trackRole("audience");
+    }
+  }, [broadcastEvent, participant.participantId, trackRole]);
 
   const resetRound = useCallback(async () => {
     const round = currentRoundRef.current;
@@ -271,7 +316,10 @@ export function useElevatorStage() {
     if (round) {
       await broadcastEvent({ type: "round_reset", roundId: round.roundId });
     }
-  }, [broadcastEvent]);
+    if (roleRef.current === "speaker") {
+      await trackRole("audience");
+    }
+  }, [broadcastEvent, trackRole]);
 
   const saveResult = useCallback(() => {
     const round = currentRoundRef.current;
@@ -338,6 +386,34 @@ export function useElevatorStage() {
       const nextParticipants = flattenPresenceState(channel.presenceState());
       participantsRef.current = nextParticipants;
       setParticipants(nextParticipants);
+
+      const liveSpeaker = nextParticipants.find(
+        (item) => item.role === "speaker" && item.activeRound && isRoundLive(item.activeRound),
+      );
+      if (!liveSpeaker?.activeRound) {
+        return;
+      }
+
+      const current = currentRoundRef.current;
+      if (current?.roundId === liveSpeaker.activeRound.roundId) {
+        return;
+      }
+
+      const recoveredRound = createRound(
+        liveSpeaker.activeRound.roundId,
+        liveSpeaker.activeRound.speakerId,
+        liveSpeaker.nickname,
+        liveSpeaker.activeRound.pitch,
+        liveSpeaker.activeRound.endsAt,
+      );
+      if (!recoveredRound) {
+        return;
+      }
+
+      setCurrentRound(recoveredRound);
+      currentRoundRef.current = recoveredRound;
+      setFeedback([]);
+      setSaved(false);
     });
 
     channel.on("broadcast", { event: "elevator" }, ({ payload }) => {
@@ -356,6 +432,9 @@ export function useElevatorStage() {
           payload.pitch,
           payload.endsAt,
         );
+        if (!nextRound) {
+          return;
+        }
         setCurrentRound(nextRound);
         currentRoundRef.current = nextRound;
         setFeedback([]);
@@ -385,6 +464,9 @@ export function useElevatorStage() {
         const endedRound = { ...round, ended: true };
         setCurrentRound(endedRound);
         currentRoundRef.current = endedRound;
+        if (round.speakerId === participant.participantId) {
+          void trackRole("audience");
+        }
         return;
       }
 
@@ -393,6 +475,9 @@ export function useElevatorStage() {
         currentRoundRef.current = null;
         setFeedback([]);
         setSaved(false);
+        if (roleRef.current === "speaker" || round.speakerId === participant.participantId) {
+          void trackRole("audience");
+        }
       }
     });
 
@@ -429,11 +514,14 @@ export function useElevatorStage() {
         setCurrentRound(endedRound);
         currentRoundRef.current = endedRound;
         void broadcastEvent({ type: "round_ended", roundId: round.roundId });
+        if (round.speakerId === participant.participantId) {
+          void trackRole("audience");
+        }
       }
     }, 500);
 
     return () => window.clearInterval(timer);
-  }, [broadcastEvent]);
+  }, [broadcastEvent, participant.participantId, trackRole]);
 
   useEffect(() => {
     return () => {

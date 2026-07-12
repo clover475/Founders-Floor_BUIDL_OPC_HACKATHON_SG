@@ -3,7 +3,7 @@
 ## Snapshot
 
 - Current milestone: Vercel-deployed hackathon vertical slice with live Coffee Corner and Elevator Stage
-- Current health: T1 and T2 accepted; T3 correction complete; T4 review failed on speaker lifecycle and remains unaccepted; T5 repo-side hardening is conditionally accepted pending Vercel production validation; Supabase Vercel integration env mapping added
+- Current health: T1 and T2 accepted; T3 correction complete; T4 correction complete pending production two-browser validation; T5 repo-side hardening is conditionally accepted pending Vercel production validation; Supabase Vercel integration env mapping added
 - Last updated: 2026-07-12
 
 ## Completed
@@ -26,11 +26,11 @@
 - T4/T5 review completed: local lint/build and repository hygiene pass. T4 cannot be accepted because ending or resetting a round does not release the speaker Presence role, so other browsers can remain blocked after reset. T5 repository deliverables are present, but Vercel configuration and two-browser production tests remain Clover-owned acceptance steps.
 - Backend boundary reconfirmed: keep the Supabase configuration/client seam and local repository abstraction, but do not add database tables, authentication, or server APIs during the hackathon. A persistent backend can be added after the interaction is validated.
 - Deployment env compatibility added: `next.config.ts` maps Supabase Vercel integration variables (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_ANON_KEY`) into the browser-facing `NEXT_PUBLIC_SUPABASE_*` values at build time.
+- T4 correction complete: Elevator speaker Presence now carries active round metadata for late join recovery, stale or expired speaker Presence no longer blocks the stage, and end/reset/timeout paths release the local speaker role back to audience.
 
 ## In progress
 
-- T4 needs one focused correction before production validation: release or expire the speaker role when a round ends/resets, while preserving the one-speaker guard.
-- Vercel/Supabase production validation remains. Clover will configure the deployed Vercel project and publishable variables.
+- Vercel/Supabase production validation remains for Coffee Corner and Elevator Stage with two browsers or devices.
 
 ## Current issues
 
@@ -38,18 +38,14 @@
 - Product code must not be backdated or imported from an earlier codebase.
 - Supabase project URL and publishable key need to be available in Vercel via either manual `NEXT_PUBLIC_SUPABASE_*` variables or Supabase integration variables before full two-browser live validation.
 - Supabase Coffee Corner smoke test still needs a configured project to prove two browsers see each other within five seconds and that the fifth browser is blocked against live seat state.
-- Supabase Elevator Stage smoke test still needs two browsers to prove the one-speaker guard and realtime feedback aggregation.
-- Production smoke test has not been run because Vercel environment variables are not confirmed in this local session.
-- T4 blocker: `endRound` and `resetRound` clear round state but never change/untrack the current speaker Presence role. After reset, other browsers still derive `speakerBlocked=true` from the stale speaker presence.
-- T4 reliability gap: a browser that joins after `round_started` was broadcast sees the speaker Presence but cannot reconstruct the current pitch/round because Broadcast has no replay and Presence carries no round metadata.
-- T4 validation gap: `round_started.endsAt` is checked only as a string; an invalid date payload is accepted and produces a non-terminating `NaN` countdown instead of being ignored.
+- Supabase Elevator Stage smoke test still needs two browsers to prove the one-speaker guard, late-join round recovery, reset release, and realtime feedback aggregation.
+- Production smoke test confirms Supabase env is present on the deployed site; Coffee/Elevator two-browser validation remains.
 
 ## Next steps
 
-1. Make one T4 correction commit for speaker release/expiry, late-join round recovery, and semantic `endsAt` validation.
-2. Redeploy from GitHub/Vercel so the Supabase integration variables are mapped into the client bundle.
-3. Run the T3/T4 production two-browser smoke tests.
-4. Record the backup demo using `docs/stage-checklist.md` and complete OpenArena submission credits before 18:00 SGT.
+1. Redeploy from GitHub/Vercel so the T4 correction reaches production.
+2. Run the T3/T4 production two-browser smoke tests.
+3. Record the backup demo using `docs/stage-checklist.md` and complete OpenArena submission credits before 18:00 SGT.
 
 ## Validation
 
@@ -65,4 +61,6 @@
 - T4 validation: `npm run lint` passed; `npm run build` passed; local route check for `/elevator` returned HTTP 200. Elevator live behavior still needs Supabase browser validation.
 - T5 validation: `npm run lint` passed; `npm run build` passed. Local route checks on port 3001 returned HTTP 200 for `/`, `/coffee-corner`, `/elevator`, and `/ship-wall`. Responsive browser checks at 1280px and 390px for Coffee Corner, Elevator Stage, and Ship Wall showed no horizontal overflow or over-wide buttons.
 - T4/T5 review validation: `npm run lint` passed; `npm run build` passed; `git diff 89c45e9..1dcb5ee --check` passed; worktree was clean before this status-only review update. Static code review found the T4 speaker lifecycle blocker and the late-join/invalid-date reliability gaps above.
-- Remaining gap: Two-browser Supabase Presence/Broadcast validation and production smoke testing are pending until Vercel is redeployed with Supabase variables available at build time.
+- Deployment env mapping validation: production homepage shows Supabase realtime variables are configured after Vercel redeploy.
+- T4 correction validation: `npm run lint` passed; `npm run build` passed. Static review confirms speaker Presence includes active round metadata, `round_started.endsAt` requires a valid date, late joiners can recover live rounds from Presence sync, and end/reset/timeout paths release the local speaker role.
+- Remaining gap: Two-browser Supabase Presence/Broadcast validation and production smoke testing are pending until Vercel is redeployed with the T4 correction.
