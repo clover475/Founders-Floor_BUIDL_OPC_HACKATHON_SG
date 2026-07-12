@@ -12,7 +12,7 @@
 - Reviewed the Hackathon MVP V1.0 product specification.
 - Chosen a single-app, local-first architecture.
 - Defined the demo-critical vertical flow and non-goals.
-- Created and pushed the public repository: https://github.com/clover475/founders-floor
+- Created and pushed the public repository: https://github.com/clover475/Founders-Floor_BUIDL_OPC_HACKATHON_SG
 - Decided on Supabase Realtime Presence/Broadcast without database tables or login.
 - Decided on Jitsi iframe meetings instead of custom WebRTC.
 - Reduced live concurrency to one four-seat Coffee Corner and one Elevator speaker.
