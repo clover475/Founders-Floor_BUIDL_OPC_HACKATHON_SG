@@ -46,7 +46,7 @@
 - Result: Passed.
 - Command: `npm run build`
 - Result: Passed.
-- Git check: `main` is clean and `origin/main` points to T3 commit `4022d4f`; T1, T2, and T3 are separate commits.
+- Git check: T1, T2, and T3 are separate commits; the T3 implementation tip is `4022d4f` and the acceptance record is `d8d9de4`.
 - Manual T1 check: missing Supabase variables show local fallback without crashing; demo reset clears saved ships.
 - Manual T2 check: completed Clock In -> Feedback Room -> Desk Check -> Clock Out -> Ship Wall with project information blank; the session and ship survived refresh.
 - Manual T3 check: local demo join changes the table from 0/4 to 1/4, opens exactly one Jitsi iframe after joining, external and embedded URLs use the same deterministic room, and leaving removes the iframe and returns to 0/4.
