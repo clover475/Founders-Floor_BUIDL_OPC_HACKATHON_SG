@@ -12,10 +12,6 @@
 [![Demo Video](https://img.shields.io/badge/Demo_Video-Watch-111111?style=for-the-badge)](#)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-111111?style=for-the-badge&logo=github)](https://github.com/clover475/Founders-Floor_BUIDL_OPC_HACKATHON_SG)
 
-<br />
-
-![Founders’ Floor Preview](docs/images/hero.png)
-
 </div>
 
 ---
@@ -364,22 +360,6 @@ The platform may also offer:
 - selected partnerships with AI tools, cloud providers, and coworking spaces.
 
 The early-stage priority is to validate retention, community interaction, and willingness to pay for sustained founder support.
-
----
-
-## Screenshots
-
-### Virtual Office
-
-![Virtual Office](docs/images/office.png)
-
-### AI Elevator Pitch Coach
-
-![AI Elevator Pitch Coach](docs/images/pitch-coach.png)
-
-### Ship Wall
-
-![Ship Wall](docs/images/ship-wall.png)
 
 ---
 
