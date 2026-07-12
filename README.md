@@ -62,4 +62,11 @@ No login, database tables, custom WebRTC, complex matching, or AI agent is requi
 
 ## Credits
 
-Built by Clover Li with AI-assisted development during BUIDL_OPC_Hackathon_SG 2026. Third-party libraries and assets will be listed here before submission.
+Built by Clover Li with AI-assisted development during BUIDL_OPC_Hackathon_SG 2026.
+
+Third-party libraries and services used in the MVP:
+
+- Next.js, React, TypeScript, and Tailwind CSS for the web app.
+- Supabase Realtime for ephemeral Coffee Corner presence.
+- Jitsi Meet iframe URLs for live Coffee Corner conversation.
+- Lucide React for interface icons.
