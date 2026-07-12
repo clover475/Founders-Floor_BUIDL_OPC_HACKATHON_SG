@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, ShipWheel, MessageSquarePlus, BadgeCheck } from "lucide-react";
+import { Plus, ShipWheel, MessageSquarePlus, BadgeCheck, TreeDeciduous } from "lucide-react";
 import { useLocale, useTranslations } from "use-intl";
 import { useEffect, useState } from "react";
 import { loadShips, loadDeskChecks } from "@/lib/storage/repository";
@@ -14,13 +14,16 @@ export function ShipWall() {
   const locale = useLocale();
   const [ships, setShips] = useState<Ship[]>([]);
   const [deskChecks, setDeskChecks] = useState<DeskCheck[]>([]);
+  const [treeCount, setTreeCount] = useState(0);
   const [acceptedChecks, setAcceptedChecks] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    setShips(loadShips());
+    const allShips = loadShips();
     const allChecks = loadDeskChecks();
+    setShips(allShips);
     // Only show desk checks that are currently requested
     setDeskChecks(allChecks.filter(check => check.status === "requested"));
+    setTreeCount(allShips.length + allChecks.filter(check => check.status === "completed").length);
   }, []);
 
   const handleAccept = (id: string) => {
@@ -43,6 +46,20 @@ export function ShipWall() {
           {t("new")}
         </Link>
       </section>
+
+      {/* Forest teaser */}
+      <Link
+        href="/work-log"
+        className="flex items-center justify-between gap-4 border border-floor-line bg-floor-panel/60 p-4 transition hover:border-floor-green hover:bg-floor-panel"
+      >
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center bg-white text-floor-green">
+            <TreeDeciduous size={18} aria-hidden="true" />
+          </div>
+          <p className="text-sm font-medium text-floor-ink">{t("forestTeaser", { count: treeCount })}</p>
+        </div>
+        <span className="text-sm font-medium text-floor-green">{t("forestTeaserCta")}</span>
+      </Link>
 
       {/* Requests Section */}
       <section>

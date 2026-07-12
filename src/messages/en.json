@@ -1,6 +1,6 @@
 {
   "language": { "english": "English", "chinese": "Chinese", "switchTo": "Switch to {language}" },
-  "nav": { "floor": "Floor", "community": "Community Board", "coffee": "Coffee", "elevator": "Elevator", "workLog": "Work log", "clockOut": "Clock out" },
+  "nav": { "floor": "Floor", "community": "Community Board", "coffee": "Coffee", "elevator": "Elevator", "workLog": "Work log" },
   "rooms": {
     "idea": { "name": "Idea Room", "description": "Explore opportunities, user problems, and rough founder ideas." },
     "build": { "name": "Build Room", "description": "Work around other builders who are shipping MVPs today." },
@@ -201,7 +201,9 @@
     "noneDescription": "Be the first to clock out and ship something today.",
     "noDeskChecks": "No active desk checks. Everyone is focused!",
     "shipEyebrow": "Shipped",
-    "shipTitle": "Ship Wall"
+    "shipTitle": "Ship Wall",
+    "forestTeaser": "{count, plural, =0 {No trees planted yet} =1 {# tree planted in your Achievement Forest} other {# trees planted in your Achievement Forest}}",
+    "forestTeaserCta": "View your Work Log"
   },
   "meeting": {
     "audio": "Audio and video start muted. Use headphones in the venue.",

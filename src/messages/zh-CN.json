@@ -1,6 +1,6 @@
 {
   "language": { "english": "英文", "chinese": "中文", "switchTo": "切换到{language}" },
-  "nav": { "floor": "办公区", "community": "社区墙", "coffee": "茶水间", "elevator": "电梯演讲", "workLog": "工作记录", "clockOut": "下班" },
+  "nav": { "floor": "办公区", "community": "社区墙", "coffee": "茶水间", "elevator": "电梯演讲", "workLog": "工作记录" },
   "rooms": {
     "idea": { "name": "想法室", "description": "探索机会、用户问题和还未成形的创业想法。" },
     "build": { "name": "共创室", "description": "和今天正在交付 MVP 的 Builder 一起工作。" },
@@ -201,7 +201,9 @@
     "noneDescription": "成为今天第一个下班并展示成果的人吧。",
     "noDeskChecks": "当前没有活跃的请求，大家都在专注 Build！",
     "shipEyebrow": "已交付成果",
-    "shipTitle": "成果墙"
+    "shipTitle": "成果墙",
+    "forestTeaser": "你的成果森林已种下 {count} 棵树",
+    "forestTeaserCta": "查看工作记录"
   },
   "meeting": {
     "audio": "音频和视频默认静音。在现场请使用耳机。",
