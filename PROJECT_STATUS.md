@@ -3,7 +3,7 @@
 ## Snapshot
 
 - Current milestone: Vercel-deployed hackathon vertical slice with live Coffee Corner and Elevator Stage
-- Current health: T1 and T2 accepted; T3 correction complete; T4 correction complete pending production two-browser validation; T5 repo-side hardening is conditionally accepted pending Vercel production validation; Supabase Vercel integration env mapping added
+- Current health: T1, T2, and production two-browser Coffee/Elevator realtime smoke tests passed; T3 fifth-seat cap still needs a real five-device check; T4 correction passed production two-browser smoke testing; T5 production deployment path is accepted for the hackathon demo
 - Last updated: 2026-07-12
 
 ## Completed
@@ -30,22 +30,22 @@
 
 ## In progress
 
-- Vercel/Supabase production validation remains for Coffee Corner and Elevator Stage with two browsers or devices.
+- Production validation is complete for the two-browser Coffee Corner and Elevator Stage demo path.
 
 ## Current issues
 
 - Exact on-stage pitch duration has not been announced.
 - Product code must not be backdated or imported from an earlier codebase.
 - Supabase project URL and publishable key need to be available in Vercel via either manual `NEXT_PUBLIC_SUPABASE_*` variables or Supabase integration variables before full two-browser live validation.
-- Supabase Coffee Corner smoke test still needs a configured project to prove two browsers see each other within five seconds and that the fifth browser is blocked against live seat state.
-- Supabase Elevator Stage smoke test still needs two browsers to prove the one-speaker guard, late-join round recovery, reset release, and realtime feedback aggregation.
-- Production smoke test confirms Supabase env is present on the deployed site; Coffee/Elevator two-browser validation remains.
+- Supabase Coffee Corner two-browser smoke test passed; fifth-seat blocking still needs a real five-device or five-isolated-browser check.
+- Supabase Elevator Stage two-browser smoke test passed for one-speaker guard, audience feedback aggregation, reset release, and starting a second round from the other browser.
+- Production smoke test confirms Supabase env is present on the deployed site.
 
 ## Next steps
 
-1. Redeploy from GitHub/Vercel so the T4 correction reaches production.
-2. Run the T3/T4 production two-browser smoke tests.
-3. Record the backup demo using `docs/stage-checklist.md` and complete OpenArena submission credits before 18:00 SGT.
+1. Record the backup demo using `docs/stage-checklist.md`.
+2. Complete OpenArena submission credits before 18:00 SGT.
+3. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
 
 ## Validation
 
@@ -63,4 +63,5 @@
 - T4/T5 review validation: `npm run lint` passed; `npm run build` passed; `git diff 89c45e9..1dcb5ee --check` passed; worktree was clean before this status-only review update. Static code review found the T4 speaker lifecycle blocker and the late-join/invalid-date reliability gaps above.
 - Deployment env mapping validation: production homepage shows Supabase realtime variables are configured after Vercel redeploy.
 - T4 correction validation: `npm run lint` passed; `npm run build` passed. Static review confirms speaker Presence includes active round metadata, `round_started.endsAt` requires a valid date, late joiners can recover live rounds from Presence sync, and end/reset/timeout paths release the local speaker role.
-- Remaining gap: Two-browser Supabase Presence/Broadcast validation and production smoke testing are pending until Vercel is redeployed with the T4 correction.
+- Production validation: homepage showed `Configured` and no local fallback. Coffee Corner passed two-browser realtime sync: both browsers connected, seat count moved from 0/4 to 1/4 to 2/4, both saw the same deterministic Jitsi room, and both loaded an iframe. Elevator Stage passed two-browser realtime sync: one browser started a round, the other saw the live pitch, joined as audience, submitted feedback, and the speaker result card updated to 1 understood / 1 follow-up / 1 user signal with the audience question. Reset returned both browsers to Stage open, and the second browser successfully started a new round.
+- Remaining gap: Coffee Corner fifth-seat cap has not been tested with five isolated identities in production.
