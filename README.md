@@ -69,6 +69,28 @@ It gives founders a simple reason to step away from isolated work, join a short 
 
 ---
 
+## Achievement Forest
+
+Founders’ Floor rewards completed outcomes rather than time spent online.
+
+Every meaningful result submitted through Clock Out becomes part of the member’s achievement history. After reaching key milestones—for example, completing ten achievements—the user grows a new tree in their personal Achievement Forest.
+
+Achievements can include:
+
+- validating an idea;
+- completing a user interview;
+- publishing a landing page;
+- shipping a feature;
+- finding a first tester;
+- sending an outreach message;
+- making a first sale.
+
+Unlike traditional focus apps that grow trees based on time, the Achievement Forest grows from real progress.
+
+Over time, the forest becomes a visual record of what the founder has actually built, tested, learned, and shipped.
+
+---
+
 ## Current MVP
 
 The current demo includes:
