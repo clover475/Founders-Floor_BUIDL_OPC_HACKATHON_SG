@@ -51,7 +51,12 @@ The app works without Supabase variables. In that mode, Coffee Corner and Elevat
 
 ## Vercel environment
 
-Set these variables in Vercel Project Settings -> Environment Variables:
+The app supports Supabase's Vercel integration variables. If the integration creates
+`SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, the Next.js build maps them to the
+public browser config automatically.
+
+Manual fallback variables are also supported in Vercel Project Settings ->
+Environment Variables:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL=
@@ -60,7 +65,8 @@ NEXT_PUBLIC_EVENT_SLUG=founders-floor-hackathon
 NEXT_PUBLIC_JITSI_DOMAIN=meet.jit.si
 ```
 
-Use only the Supabase publishable browser key. Do not add a service-role key to Vercel or this repository.
+Use only the Supabase publishable browser key for public realtime config. Do not
+use a service-role key in browser-facing variables or this repository.
 
 ## Demo story
 

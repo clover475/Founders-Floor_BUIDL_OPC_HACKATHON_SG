@@ -3,7 +3,7 @@
 ## Snapshot
 
 - Current milestone: Vercel-deployed hackathon vertical slice with live Coffee Corner and Elevator Stage
-- Current health: T1 and T2 accepted; T3 correction complete; T4 review failed on speaker lifecycle and remains unaccepted; T5 repo-side hardening is conditionally accepted pending Vercel production validation
+- Current health: T1 and T2 accepted; T3 correction complete; T4 review failed on speaker lifecycle and remains unaccepted; T5 repo-side hardening is conditionally accepted pending Vercel production validation; Supabase Vercel integration env mapping added
 - Last updated: 2026-07-12
 
 ## Completed
@@ -25,6 +25,7 @@
 - T5 repo-side hardening complete: added environment variable template, explicit Coffee/Elevator connecting/disconnected/full-stage states, Jitsi loading/slow-embed fallback, README deployment/demo instructions, and `docs/stage-checklist.md`.
 - T4/T5 review completed: local lint/build and repository hygiene pass. T4 cannot be accepted because ending or resetting a round does not release the speaker Presence role, so other browsers can remain blocked after reset. T5 repository deliverables are present, but Vercel configuration and two-browser production tests remain Clover-owned acceptance steps.
 - Backend boundary reconfirmed: keep the Supabase configuration/client seam and local repository abstraction, but do not add database tables, authentication, or server APIs during the hackathon. A persistent backend can be added after the interaction is validated.
+- Deployment env compatibility added: `next.config.ts` maps Supabase Vercel integration variables (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_ANON_KEY`) into the browser-facing `NEXT_PUBLIC_SUPABASE_*` values at build time.
 
 ## In progress
 
@@ -35,7 +36,7 @@
 
 - Exact on-stage pitch duration has not been announced.
 - Product code must not be backdated or imported from an earlier codebase.
-- Supabase project URL and publishable key still need to be configured before full two-browser live validation.
+- Supabase project URL and publishable key need to be available in Vercel via either manual `NEXT_PUBLIC_SUPABASE_*` variables or Supabase integration variables before full two-browser live validation.
 - Supabase Coffee Corner smoke test still needs a configured project to prove two browsers see each other within five seconds and that the fifth browser is blocked against live seat state.
 - Supabase Elevator Stage smoke test still needs two browsers to prove the one-speaker guard and realtime feedback aggregation.
 - Production smoke test has not been run because Vercel environment variables are not confirmed in this local session.
@@ -46,8 +47,8 @@
 ## Next steps
 
 1. Make one T4 correction commit for speaker release/expiry, late-join round recovery, and semantic `endsAt` validation.
-2. Clover configures Vercel environment variables from `.env.example`.
-3. Deploy from GitHub/Vercel and run the T3/T4 production two-browser smoke tests.
+2. Redeploy from GitHub/Vercel so the Supabase integration variables are mapped into the client bundle.
+3. Run the T3/T4 production two-browser smoke tests.
 4. Record the backup demo using `docs/stage-checklist.md` and complete OpenArena submission credits before 18:00 SGT.
 
 ## Validation
@@ -64,4 +65,4 @@
 - T4 validation: `npm run lint` passed; `npm run build` passed; local route check for `/elevator` returned HTTP 200. Elevator live behavior still needs Supabase browser validation.
 - T5 validation: `npm run lint` passed; `npm run build` passed. Local route checks on port 3001 returned HTTP 200 for `/`, `/coffee-corner`, `/elevator`, and `/ship-wall`. Responsive browser checks at 1280px and 390px for Coffee Corner, Elevator Stage, and Ship Wall showed no horizontal overflow or over-wide buttons.
 - T4/T5 review validation: `npm run lint` passed; `npm run build` passed; `git diff 89c45e9..1dcb5ee --check` passed; worktree was clean before this status-only review update. Static code review found the T4 speaker lifecycle blocker and the late-join/invalid-date reliability gaps above.
-- Remaining gap: Two-browser Supabase Presence/Broadcast validation and production smoke testing are pending until `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are configured in Vercel.
+- Remaining gap: Two-browser Supabase Presence/Broadcast validation and production smoke testing are pending until Vercel is redeployed with Supabase variables available at build time.
