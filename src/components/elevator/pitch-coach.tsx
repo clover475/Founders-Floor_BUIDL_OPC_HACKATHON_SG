@@ -96,7 +96,7 @@ function fmtDuration(s: number) {
 export function PitchCoach() {
   // ── core state ──
   const [stage, setStage] = useState<Stage>("record");
-  const [language, setLanguage] = useState<Language>("zh");
+  const [language, setLanguage] = useState<Language>("en");
   const [transcript, setTranscript] = useState("");
   const [result, setResult] = useState<PitchAnalysisResult | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
@@ -324,50 +324,48 @@ export function PitchCoach() {
       ══════════════════════════════════════════════════ */}
       {stage === "record" ? (
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Video / camera panel */}
+          {/* Video / camera panel — clicking the frame starts or stops recording */}
           <div className="space-y-3">
-            <div className="relative overflow-hidden border border-floor-line bg-black aspect-video">
+            <button
+              type="button"
+              onClick={() => {
+                if (isRecording) void stopRecording();
+                else void startRecording();
+              }}
+              className="group relative w-full overflow-hidden border border-floor-line bg-black aspect-video cursor-pointer focus:outline-none"
+              aria-label={isRecording ? "Stop recording" : "Start recording"}
+            >
               <video
                 ref={videoRef}
                 className="h-full w-full object-cover"
                 playsInline
               />
-              {!isRecording && elapsed === 0 ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                  <p className="text-sm text-white/70">Camera preview will appear here</p>
-                </div>
-              ) : null}
-              {isRecording ? (
-                <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded bg-red-600 px-2 py-1">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
-                  <span className="text-xs font-medium text-white">
-                    REC {fmtDuration(elapsed)}
-                  </span>
-                </div>
-              ) : null}
-            </div>
 
-            <div className="flex gap-2">
-              {!isRecording ? (
-                <button
-                  type="button"
-                  onClick={() => void startRecording()}
-                  className="inline-flex flex-1 items-center justify-center gap-2 bg-floor-ink px-4 py-3 text-sm font-medium text-white hover:bg-black"
-                >
-                  <Mic size={16} />
-                  Start Recording
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => void stopRecording()}
-                  className="inline-flex flex-1 items-center justify-center gap-2 border border-red-400 bg-white px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50"
-                >
-                  <Square size={16} />
-                  Stop ({fmtDuration(elapsed)})
-                </button>
-              )}
-            </div>
+              {/* idle — not yet started */}
+              {!isRecording && elapsed === 0 ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/60 transition group-hover:bg-black/70">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/70 text-white group-hover:border-white">
+                    <Mic size={26} />
+                  </div>
+                  <p className="text-sm font-medium text-white/80 group-hover:text-white">Click to start recording</p>
+                </div>
+              ) : null}
+
+              {/* recording — show stop hint on hover */}
+              {isRecording ? (
+                <>
+                  <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded bg-red-600 px-2 py-1">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+                    <span className="text-xs font-medium text-white">REC {fmtDuration(elapsed)}</span>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-black/50">
+                      <Square size={22} className="text-white" />
+                    </div>
+                  </div>
+                </>
+              ) : null}
+            </button>
 
             {!speechSupported ? (
               <div className="flex items-start gap-2 border border-amber-200 bg-amber-50 p-3">
