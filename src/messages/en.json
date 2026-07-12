@@ -1,6 +1,6 @@
 {
   "language": { "english": "English", "chinese": "Chinese", "switchTo": "Switch to {language}" },
-  "nav": { "floor": "Floor", "coffee": "Coffee", "elevator": "Elevator", "clockOut": "Clock out" },
+  "nav": { "floor": "Floor", "community": "Community Board", "coffee": "Coffee", "elevator": "Elevator", "clockOut": "Clock out" },
   "rooms": {
     "idea": { "name": "Idea Room", "description": "Explore opportunities, user problems, and rough founder ideas." },
     "build": { "name": "Build Room", "description": "Work around other builders who are shipping MVPs today." },

@@ -1,6 +1,6 @@
 {
   "language": { "english": "英文", "chinese": "中文", "switchTo": "切换到{language}" },
-  "nav": { "floor": "办公区", "coffee": "咖啡角", "elevator": "电梯演讲", "clockOut": "下班" },
+  "nav": { "floor": "办公区", "community": "社区墙", "coffee": "茶水间", "elevator": "电梯演讲", "clockOut": "下班" },
   "rooms": {
     "idea": { "name": "想法室", "description": "探索机会、用户问题和还未成形的创业想法。" },
     "build": { "name": "共创室", "description": "和今天正在交付 MVP 的 Builder 一起工作。" },
