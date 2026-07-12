@@ -39,7 +39,9 @@ Clock In
 - Idea, Build, Feedback, and Growth rooms.
 - Visible member presence and availability state.
 - One structured Desk Check flow with templates and status changes.
-- Break Room with Move Together and Elevator Pitch.
+- Break Room with Move Together.
+- One shared Coffee Corner where up to four real people can join a live conversation.
+- One shared Elevator Stage where a speaker pitches to a real-time audience and receives structured feedback.
 - Clock Out form and Ship Wall.
 - Seeded demo members plus local current-user data.
 
@@ -52,15 +54,17 @@ If time is limited, preserve these in order:
 3. Desk Check state change.
 4. Clock Out.
 5. Ship Wall update.
-6. Elevator Pitch timer and feedback card.
-7. Move Together.
+6. Realtime Coffee Corner presence and meeting join.
+7. Elevator Stage timer, audience feedback, and result card.
+8. Move Together.
 
 ## Out of scope
 
 - Login, profiles, payment, annual membership.
-- Real-time audio/video or chat.
+- Custom audio/video or chat infrastructure.
 - Automated matching or AI recommendations.
-- Supabase and cross-device synchronization.
+- Persistent cross-device history or database-backed profiles.
+- Multiple simultaneous coffee tables or elevator rounds.
 - Full forum, knowledge base, or weekly Sprint system.
 - 3D map, avatars, points, or many games.
 
@@ -70,8 +74,10 @@ If time is limited, preserve these in order:
 - A user can understand who is available and what each person is working on.
 - A Desk Check can move from open to accepted to completed.
 - A user can clock out and immediately see the result on the Ship Wall.
+- Two browsers can see one another join and leave Coffee Corner.
+- A live Elevator audience can submit feedback that updates the speaker's result card.
 - At least one participant reports feeling “less like I was working alone.”
-- Demo works without network access after the page has loaded.
+- The personal demo loop still works when realtime or meeting services are unavailable.
 
 ## Long-term direction
 

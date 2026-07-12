@@ -2,21 +2,72 @@
 
 ## Decision summary
 
-Use one Next.js application with local-first persistence. This minimizes build risk, creates a stage-safe demo, and keeps a clean seam for a later realtime backend.
+Use one Next.js application with two deliberately separate state layers:
+
+1. **Personal durable state:** localStorage holds the current browser's Clock In session, Desk Checks, and Ships.
+2. **Shared ephemeral state:** Supabase Realtime Presence and Broadcast let multiple browsers see and participate in Coffee Corner and Elevator Stage.
+
+Use Jitsi's IFrame API for live audio/video. Founders' Floor coordinates the people and the activity; it does not implement a meeting stack.
 
 ## Deployment shape
 
 ```text
-Browser
+Vercel
   └─ Next.js app
-      ├─ Server-rendered shell and metadata
-      ├─ Client interaction features
-      ├─ Demo fixtures
-      └─ StorageRepository
-          └─ localStorage (MVP)
-
-Later: StorageRepository → Supabase adapter
+      ├─ Personal demo flow
+      │   └─ LocalStorageRepository
+      ├─ Live coordination
+      │   └─ Supabase Realtime
+      │       ├─ Presence: who is here / current activity
+      │       └─ Broadcast: round events / audience feedback
+      └─ Live conversation
+          └─ Jitsi iframe or open-in-new-tab fallback
 ```
+
+No application database, server actions, custom API routes, or authentication are required for the MVP.
+
+## Product-level realtime model
+
+### Coffee Corner
+
+- Exactly one shared public table in the MVP.
+- Capacity shown as four seats; joining after four displays “table full”.
+- Presence payload identifies each browser by a locally generated UUID and nickname.
+- Participants join one deterministic Jitsi room derived from `NEXT_PUBLIC_EVENT_SLUG`.
+- Audio starts muted to avoid venue feedback; users explicitly unmute.
+- Leaving the page untracks presence and disposes the meeting iframe.
+
+This is intentionally not private and not suitable for sensitive discussion.
+
+### Elevator Stage
+
+- Exactly one public stage and one active round at a time.
+- One browser starts a 30-second round as speaker.
+- Speaker and listeners share one deterministic Jitsi room.
+- Realtime Presence shows the speaker and listener count.
+- Broadcast events coordinate the activity:
+
+```text
+round_started
+tick_sync          (optional; local countdown remains authoritative)
+feedback_submitted
+round_ended
+round_reset
+```
+
+- Audience feedback is aggregated in the speaker's browser during the round.
+- Result persistence is local to the speaker; realtime feedback is ephemeral.
+- No distributed lock is built. The UI disables “Start” while a speaker is present; a host can reset a stale round.
+
+## Why this is the minimum
+
+| Alternative | Rejected because |
+|---|---|
+| Build WebRTC | Too risky and unrelated to the product insight |
+| Daily/LiveKit dynamic rooms | Requires token APIs and backend room lifecycle |
+| Supabase database + anonymous auth | Adds tables, RLS, cleanup, and failure modes not needed for a live round |
+| External meeting link only | Provides conversation but no in-product presence, state, or feedback |
+| Multiple coffee tables | Introduces room discovery, concurrency, and moderation before value is proven |
 
 ## Planned repository structure
 
@@ -27,6 +78,8 @@ src/
     clock-in/page.tsx
     office/[room]/page.tsx
     desk-check/page.tsx
+    coffee-corner/page.tsx
+    elevator/page.tsx
     break-room/page.tsx
     clock-out/page.tsx
     ship-wall/page.tsx
@@ -34,77 +87,136 @@ src/
     layout/
     office/
     desk-check/
-    break-room/
+    live/
+      presence-list.tsx
+      jitsi-meeting.tsx
+      realtime-status.tsx
+    elevator/
     ship-wall/
     ui/
   features/
     sessions/
     interactions/
-    pitches/
+    coffee/
+    elevator/
     ships/
   lib/
     storage/
       repository.ts
       local-storage.ts
+    realtime/
+      client.ts
+      use-floor-presence.ts
+      use-elevator-channel.ts
+    identity.ts
     demo-data.ts
     stats.ts
   types/
     domain.ts
+    realtime.ts
 public/
 docs/
 ```
 
-## Module responsibilities
+## Channel contracts
 
-| Module | Owns | Does not own |
-|---|---|---|
-| `app` | Routes, page composition, metadata | Domain rules |
-| `components` | Presentational and reusable UI | Persistence |
-| `features/sessions` | Clock in/out and current status | Room visuals |
-| `features/interactions` | Desk Check lifecycle | Messaging/video |
-| `features/pitches` | Timer and feedback aggregation | AI coaching |
-| `features/ships` | Outcome submission and celebration | Long-term analytics |
-| `lib/storage` | CRUD boundary and browser persistence | UI state |
-| `lib/demo-data` | Seeded coworkers and activity | User-entered personal data |
+### `floor:lobby:{eventSlug}`
 
-## State model
+Presence payload:
 
-- Canonical domain data: `members`, `sessions`, `deskChecks`, `pitches`, `pitchFeedback`, `ships`.
-- UI-only state: modals, timer state, room filters, celebration animation.
-- Persist domain data with a versioned localStorage envelope.
-- Seed demo data only when no stored state exists.
-- Use a hydration guard before reading browser storage.
-
-## Data flow
-
-```text
-User action
-→ feature command
-→ StorageRepository mutation
-→ state refresh
-→ derived statistics
-→ UI update
+```ts
+type FloorPresence = {
+  participantId: string;
+  nickname: string;
+  room: "idea" | "build" | "feedback" | "growth" | "break";
+  activity: "focused" | "open_to_chat" | "coffee" | "elevator";
+  goal?: string;
+  onlineAt: string;
+};
 ```
 
-## Stage-safety rules
+### `floor:coffee:{eventSlug}`
 
-- No required external API calls during the demo.
-- No login or secret keys.
-- Provide Reset Demo Data for a repeatable presentation.
-- Keep a pre-seeded happy path.
-- Record a backup demo video before submission.
+Presence payload:
 
-## Future backend seam
+```ts
+type CoffeePresence = {
+  participantId: string;
+  nickname: string;
+  joinedAt: string;
+};
+```
 
-The storage interface should expose simple async methods even when backed by localStorage. A future Supabase adapter can then add shared rooms and realtime feedback without rewriting feature components.
+### `floor:elevator:{eventSlug}`
+
+Presence payload:
+
+```ts
+type ElevatorPresence = {
+  participantId: string;
+  nickname: string;
+  role: "speaker" | "audience";
+  joinedAt: string;
+};
+```
+
+Broadcast payload:
+
+```ts
+type ElevatorEvent =
+  | { type: "round_started"; roundId: string; speakerId: string; pitch: string; endsAt: string }
+  | { type: "feedback_submitted"; roundId: string; feedback: PitchFeedbackInput }
+  | { type: "round_ended"; roundId: string }
+  | { type: "round_reset"; roundId: string };
+```
+
+All incoming payloads must be runtime-validated before use.
+
+## Environment variables
+
+```text
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_EVENT_SLUG=founders-floor-hackathon
+NEXT_PUBLIC_JITSI_DOMAIN=meet.jit.si
+```
+
+Only publishable browser-safe values are permitted. No service-role key belongs in Vercel or the repository.
+
+## Failure and fallback behavior
+
+| Failure | Required behavior |
+|---|---|
+| Supabase env missing | Show demo coworkers and “Live mode unavailable”; personal flow still works |
+| Realtime disconnects | Preserve current page; retry connection; never lose local Clock In/Ship data |
+| Jitsi fails to embed | Show “Open meeting in a new tab” with the same room URL |
+| Coffee table full | Allow watching seat state; do not silently exceed four in the website UI |
+| Elevator speaker disappears | After a short timeout, show host Reset Round control |
+| Venue audio echo | Default audio/video muted and show a headphones reminder |
+
+## Security and privacy boundary
+
+- Do not collect email, phone, social profiles, or precise location.
+- Display names and pitch text are public to current channel participants.
+- Never use meeting rooms for confidential discussions.
+- Use an event-specific slug and rotate it after the event.
+- Realtime is an event prototype, not a production moderation model.
+
+## Validation
+
+- Run the personal journey in one browser with realtime disabled.
+- Open two clean browser contexts and verify join/leave presence.
+- Join Coffee Corner from two devices and verify meeting fallback.
+- Start one Elevator round, submit feedback from the second browser, and verify aggregation.
+- Deploy to Vercel and repeat the two-browser smoke test on the production URL.
 
 ## Risks
 
 | Risk | Response |
 |---|---|
-| Too many screens for seven hours | Build a vertical slice first; games are last |
-| localStorage hydration mismatch | Isolate reads to client components and show a loading shell |
-| Demo feels fake | Seed believable members, allow genuine local actions, show immediate outcomes |
-| Weak link to Agentic Services theme | Pitch as social infrastructure for AI-amplified founders; do not claim an AI agent that is not built |
-| Network failure on stage | Local-first runtime and backup recording |
-| Commit-history disqualification | Small chronological commits from the official hacking window |
+| Realtime integration consumes the build window | Implement it only for Coffee/Elevator after the local vertical slice |
+| Public meeting abuse | Event-only slug, no sensitive content, host reset, rotate after event |
+| Jitsi public deployment is unavailable | New-tab fallback and face-to-face venue fallback |
+| Concurrent speakers | Presence-based UI guard; no distributed lock in MVP |
+| Network failure on stage | Local personal flow, seeded data, and backup recording |
+| Demo feels like a meeting wrapper | The product owns office context, presence, activity rules, feedback, and shipping loop |

@@ -111,8 +111,19 @@ type StoredState = {
 };
 ```
 
+## Ephemeral realtime state
+
+Realtime payloads are not added to `StoredState` except when the speaker explicitly saves an Elevator result. See `docs/architecture.md` for channel contracts.
+
+- Presence: current participant, room/activity, and online timestamp.
+- Coffee Presence: four-seat occupancy.
+- Elevator Presence: one speaker plus audience.
+- Elevator Broadcast: round start/end/reset and audience feedback.
+
+Every participant gets a random browser-local `participantId`. No email or permanent account is used.
+
 ## Open questions
 
 - Whether a single member can have multiple active sessions; MVP should prevent it.
 - Whether evidence upload is needed; MVP should accept a URL only.
-- Whether live attendees will use separate devices; if yes, add Supabase only after the local demo is stable.
+- Whether the public Jitsi deployment behaves reliably on the event network; retain the new-tab and face-to-face fallbacks.

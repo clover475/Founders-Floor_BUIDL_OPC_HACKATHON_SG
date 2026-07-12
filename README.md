@@ -19,11 +19,13 @@ The hackathon uses a strict Fresh Code Rule. All submitted code must be written 
 - Next.js App Router
 - TypeScript
 - Tailwind CSS
-- Local browser storage behind a small repository interface
+- Local browser storage for the personal demo journey
+- Supabase Realtime for live presence, room state, and audience feedback
+- Jitsi iframe meetings for Coffee Corner and Elevator Stage
 - Static demo members to make the office feel alive on first load
 - Vercel deployment
 
-No login, database, video calling, complex matching, or AI agent is required for the MVP.
+No login, database tables, custom WebRTC, complex matching, or AI agent is required for the MVP.
 
 ## Planned routes
 
@@ -33,7 +35,9 @@ No login, database, video calling, complex matching, or AI agent is required for
 | `/clock-in` | 60-second session setup |
 | `/office/[room]` | Room and coworker presence |
 | `/desk-check` | Request or accept quick help |
-| `/break-room` | Move Together and Elevator Pitch |
+| `/coffee-corner` | Join the shared four-seat live coffee table |
+| `/elevator` | Join a live pitch stage or audience |
+| `/break-room` | Move Together and links to live interactions |
 | `/clock-out` | Submit a concrete outcome |
 | `/ship-wall` | Celebrate work shipped today |
 

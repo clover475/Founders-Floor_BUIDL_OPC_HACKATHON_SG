@@ -34,3 +34,24 @@
 - Why: Topic-based discovery is legible and buildable in seven hours.
 - Tradeoff: Help may not be optimally routed.
 - Follow-up: Use accumulated room, goal, and contribution data for later recommendations.
+
+## 2026-07-12 — Add realtime without adding an application backend
+
+- Decision: Use Supabase Realtime Presence and Broadcast, but no Postgres tables or authentication in the MVP.
+- Why: Coffee Corner and Elevator Pitch require real people on separate devices, while persistent shared history does not.
+- Tradeoff: Realtime state disappears when clients disconnect and has event-prototype security.
+- Follow-up: Add authenticated database persistence only after validating the interaction.
+
+## 2026-07-12 — Embed meetings instead of building meetings
+
+- Decision: Use Jitsi for one shared Coffee Corner and one shared Elevator Stage.
+- Why: Audio/video is necessary context but not the product's differentiator.
+- Tradeoff: Availability and moderation depend on a third-party public deployment.
+- Follow-up: Provide an open-in-new-tab fallback and default media to muted.
+
+## 2026-07-12 — Limit live concurrency
+
+- Decision: One four-seat coffee table and one active elevator speaker at a time.
+- Why: This proves real participation without implementing dynamic room lifecycle or distributed locks.
+- Tradeoff: The event cannot support many simultaneous conversations.
+- Follow-up: Add dynamic huddles only after observing demand.

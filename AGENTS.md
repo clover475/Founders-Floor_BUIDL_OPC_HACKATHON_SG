@@ -14,10 +14,11 @@
 ## Tech stack and boundaries
 
 - Next.js App Router, TypeScript, Tailwind CSS.
-- Client-side state and localStorage for the MVP.
-- All persistence must go through a small repository interface so Supabase can replace localStorage later.
-- No authentication, payments, private messaging, video, 3D office, or complex matching in the MVP.
-- Avoid runtime dependence on external APIs; the stage demo must survive weak internet.
+- Client-side state and localStorage for durable per-browser demo data.
+- Supabase Realtime Presence and Broadcast for ephemeral multi-device participation; do not add database tables or login.
+- Jitsi IFrame API for Coffee Corner and Elevator Stage audio/video; do not build WebRTC.
+- No authentication, payments, private messaging, 3D office, or complex matching in the MVP.
+- Every realtime feature needs a local/demo fallback so the stage flow survives weak internet.
 
 ## Coding rules
 
@@ -27,6 +28,8 @@
 - Preserve the full Clock In to Ship Wall flow.
 - Use accessible semantic controls and keyboard-friendly interactions.
 - Do not collect personal contact data in the demo.
+- Treat realtime events as ephemeral; never make the core Clock In to Ship flow depend on another participant.
+- Only one public Coffee Corner and one Elevator Stage exist in the MVP.
 - Credit all third-party libraries and assets in `README.md`.
 
 ## Planned commands
