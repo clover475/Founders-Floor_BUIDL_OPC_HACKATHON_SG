@@ -39,9 +39,10 @@ Clock In
 → Choose a Work Room
 → Build Alongside Others
 → Visit the Break Room
-→ Join a Lightweight Activity
 → Return to Work
-→ Clock Out and Share What You Shipped
+→ Clock Out
+→ Add a Completed Achievement
+→ Grow the Achievement Forest
 ```
 
 ---
@@ -73,21 +74,11 @@ It gives founders a simple reason to step away from isolated work, join a short 
 
 Founders’ Floor rewards completed outcomes rather than time spent online.
 
-Every meaningful result submitted through Clock Out becomes part of the member’s achievement history. After reaching key milestones—for example, completing ten achievements—the user grows a new tree in their personal Achievement Forest.
+When users Clock Out, they submit what they actually completed. Each submitted outcome is added to their achievement history. After reaching a milestone, such as ten completed achievements, the user unlocks a new tree in their personal Achievement Forest.
 
-Achievements can include:
+Unlike traditional focus apps that grow trees based on time, the Achievement Forest grows from real progress—ideas validated, products tested, features shipped, users contacted, and other meaningful outcomes.
 
-- validating an idea;
-- completing a user interview;
-- publishing a landing page;
-- shipping a feature;
-- finding a first tester;
-- sending an outreach message;
-- making a first sale.
-
-Unlike traditional focus apps that grow trees based on time, the Achievement Forest grows from real progress.
-
-Over time, the forest becomes a visual record of what the founder has actually built, tested, learned, and shipped.
+Over time, the forest becomes a visual record of what the founder has built, tested, learned, and shipped.
 
 ---
 
@@ -113,7 +104,7 @@ Some members and interactions currently use demonstration data.
 
 Founders’ Floor starts with a virtual office, but the long-term goal is to build a hands-on community for one-person companies.
 
-The platform will combine daily coworking, lightweight social interaction, product feedback, recurring OPC Sprints, Founder Crews, and resource exchange.
+The platform will combine daily coworking, lightweight social interaction, product feedback, visible achievement accumulation, recurring OPC Sprints, Founder Crews, and resource exchange.
 
 ---
 
