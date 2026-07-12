@@ -5,7 +5,7 @@ import { ArrowRight, HelpCircle, MapPin, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
 import { createLocalId, getOrCreateParticipant, saveParticipantNickname } from "@/lib/identity";
-import { loadSession, saveSession } from "@/lib/storage/repository";
+import { loadSession, saveSession, loadClockInTemplate, saveClockInTemplate } from "@/lib/storage/repository";
 import type { Activity, FounderSession, RoomId } from "@/types/domain";
 
 const roomIds: RoomId[] = ["idea", "build", "feedback", "growth"];
@@ -59,15 +59,20 @@ export function ClockInForm() {
   useEffect(() => {
     const participant = getOrCreateParticipant();
     const existing = loadSession();
+    const template = loadClockInTemplate();
 
     setNickname(participant.nickname === "Solo founder" ? "" : participant.nickname);
-    if (existing) {
-      setRoom(existing.room);
-      setActivity(existing.activity);
-      setGoal(existing.goal);
-      setHelpNeed(existing.helpNeed ?? "");
-      setProjectName(existing.projectName ?? "");
-      if (existing.region) setRegion(existing.region);
+    
+    // Prioritize active session, then fall back to saved template
+    const source = existing || template;
+    
+    if (source) {
+      if (source.room) setRoom(source.room);
+      if (source.activity) setActivity(source.activity);
+      if (source.goal) setGoal(source.goal);
+      if (source.helpNeed) setHelpNeed(source.helpNeed);
+      if (source.projectName) setProjectName(source.projectName);
+      if (source.region) setRegion(source.region);
     }
   }, []);
 
@@ -90,6 +95,9 @@ export function ClockInForm() {
     };
 
     saveSession(session);
+    // Save as template for future clock-ins
+    saveClockInTemplate({ room, activity, goal: goal.trim(), helpNeed: helpNeed.trim(), projectName: projectName.trim(), region });
+    
     router.push(`/office/${room}`);
   }
 
