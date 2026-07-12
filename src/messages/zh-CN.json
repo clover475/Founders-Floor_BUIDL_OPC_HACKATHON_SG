@@ -1,6 +1,6 @@
 {
   "language": { "english": "英文", "chinese": "中文", "switchTo": "切换到{language}" },
-  "nav": { "floor": "办公区", "coffee": "咖啡角", "elevator": "电梯演讲", "clockOut": "下班" },
+  "nav": { "floor": "办公区", "coffee": "咖啡角", "elevator": "电梯演讲", "workLog": "工作记录", "clockOut": "下班" },
   "rooms": {
     "idea": { "name": "想法室", "description": "探索机会、用户问题和还未成形的创业想法。" },
     "build": { "name": "共创室", "description": "和今天正在交付 MVP 的 Builder 一起工作。" },
@@ -10,8 +10,7 @@
   "home": {
     "tagline": "一人公司的共同办公室",
     "description": "一起上班，看见谁也在 Build，请同事做一次十分钟快速检查，再带着真实成果下班。",
-    "clockIn": "开始上班",
-    "reset": "重置演示数据"
+    "clockIn": "开始上班"
   },
   "clockIn": {
     "eyebrow": "开始上班",
@@ -159,6 +158,30 @@
     "helpedPlaceholder": "Mia、Alex 或反馈室",
     "publish": "下班并发布到成果墙",
     "defaultEvidence": "已从 Founders' Floor 提交进展。"
+  },
+  "workLog": {
+    "eyebrow": "工作记录",
+    "title": "你的上班记录和你的森林",
+    "description": "每一次上班都会留在这里，每完成一项成果就会种下一棵树。森林随着你完成的事情生长，而不是随时间生长。",
+    "clockInCta": "开始上班",
+    "forestTitle": "成果森林",
+    "forestCount": "已有 {count} 棵树",
+    "forestDescription": "每交付一项成果就种一棵树，每完成一次快速检查就种一株幼苗。这里的树不会枯萎。",
+    "forestEmpty": "交付你的第一项成果，或完成一次快速检查，种下第一棵树。",
+    "treeShipLabel": "已交付成果",
+    "treeDeskCheckLabel": "已完成快速检查",
+    "nextMilestone": "再有 {count} 棵就能到 {milestone} 棵树",
+    "milestoneMax": "你已经超过所有里程碑，继续保持。",
+    "historyTitle": "上班记录",
+    "historyDescription": "过去的工作时段，即使下班或切换办公区也会保留。",
+    "historyEmpty": "还没有上班记录。开始上班，建立第一条记录。",
+    "statusActive": "进行中",
+    "statusCompleted": "已下班",
+    "statusSwitched": "已切换办公区",
+    "clockedInAt": "上班时间 {date}",
+    "sessionMeta": "{date} · {duration}",
+    "durationMinutes": "{count} 分钟",
+    "durationUnknown": "时长未知"
   },
   "shipWall": {
     "eyebrow": "成果墙",

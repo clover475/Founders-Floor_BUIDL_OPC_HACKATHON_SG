@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Coffee, DoorOpen, Presentation, Rows3 } from "lucide-react";
+import { Coffee, DoorOpen, Presentation, Rows3, TreeDeciduous } from "lucide-react";
 import { useTranslations } from "use-intl";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 
@@ -9,6 +9,7 @@ const navItems = [
   { href: "/", label: "floor", icon: Rows3 },
   { href: "/coffee-corner", label: "coffee", icon: Coffee },
   { href: "/elevator", label: "elevator", icon: Presentation },
+  { href: "/work-log", label: "workLog", icon: TreeDeciduous },
   { href: "/clock-out", label: "clockOut", icon: DoorOpen },
 ];
 

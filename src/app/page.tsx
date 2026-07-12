@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Building2, RotateCcw, UsersRound } from "lucide-react";
+import { ArrowRight, Building2, UsersRound } from "lucide-react";
 import { useTranslations } from "use-intl";
-import { DemoResetButton } from "@/components/office/demo-reset-button";
 
 const rooms = ["idea", "build", "feedback", "growth"] as const;
 
@@ -35,10 +34,6 @@ export default function Home() {
               {t("clockIn")}
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <DemoResetButton>
-              <RotateCcw size={16} aria-hidden="true" />
-              {t("reset")}
-            </DemoResetButton>
           </div>
         </div>
       </section>

@@ -2,8 +2,8 @@
 
 ## Snapshot
 
-- Current milestone: Global-ready public launch candidate with clickable Office Rooms, multi-room Coffee Corner, and Elevator Stage
-- Current health: T1-T8 pass local lint/build checks; T8 launch UX repairs are deployed and production single-browser validation passed; Coffee fifth-seat cap still needs a real five-device check
+- Current milestone: Global-ready public launch candidate with clickable Office Rooms, multi-room Coffee Corner, Elevator Stage, and a persistent Work Log with an achievement forest
+- Current health: T1-T9 pass local lint/build checks; T8 launch UX repairs are deployed and production single-browser validation passed; T9 (Work Log/history fix) passed local browser validation but is not yet deployed; Coffee fifth-seat cap still needs a real five-device check
 - Last updated: 2026-07-12
 
 ## Completed
@@ -30,6 +30,8 @@
 - T6 complete: added English and Simplified Chinese catalogs using `use-intl`, browser-language detection, persistent manual switching, localized core product flows, locale-aware Ship Wall dates, and a mobile-safe global language control.
 - T7 complete: added `floor:lobby:{eventSlug}` Supabase Presence for ordinary Office Rooms, observer-only browsing for visitors without an active Clock In session, real coworker cards ahead of seeded examples, and explicit live/local/demo badges so public users can distinguish real participants from fallback data.
 - T8 complete: made homepage room cards clickable, removed the internal realtime status card from the public homepage, changed Coffee Corner into a selectable list of predefined voice rooms with independent Presence/Jitsi room ids, added ephemeral room title/topic editing for active coffee sessions, and reduced the Elevator Stage empty placeholder into an explicit waiting state.
+- T9 complete: fixed the bug where clock-in history was never kept (`FounderSession` lived in a single overwritable localStorage slot and was deleted on clock-out, so nothing survived). Added `SessionRecord`/`archiveSession()` in `src/lib/storage/repository.ts` so every clock-out or room switch archives the prior session into a new `founders-floor:session-history:v1` key. Added `/work-log`, a page combining (a) full clock-in history — active/completed/switched, with duration — and (b) an achievement forest inspired by the Forest focus app: one tree per shipped outcome and one sprout per completed desk check, growing with achievements instead of elapsed time, with milestone callouts at 1/3/5/10/20/35/50/75/100 trees. Added a `workLog` nav item and English/Chinese copy.
+- T9 judge-demo pass complete: added `seedShips`/`seedSessionHistory`/`seedDeskChecks` in `src/lib/demo-data.ts` — a nine-ship, twelve-record, seven-desk-check narrative of a founder building Founders' Floor itself across the hackathon week, timestamped relative to `Date.now()` so it always reads as recent. `loadShips`/`loadSessionHistory`/`loadDeskChecks` in the repository now fall back to this seed instead of an empty array, so Ship Wall, Work Log, and the Achievement Forest (15 trees pre-planted) look fully lived-in on first visit; any real clock-in/ship/desk-check a judge performs is appended on top of the seed, not instead of it. Removed the homepage "Reset demo data" button and `resetDemoData()` entirely (deleted `demo-reset-button.tsx`) so the seeded demo can't be wiped mid-judging; a judge who wants a truly blank state can clear the site's localStorage manually.
 
 ## In progress
 
@@ -50,6 +52,7 @@
 2. Run the public-launch safety pass before broad social distribution.
 3. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
 4. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
+5. Deploy T9 (Work Log/forest) and re-run the production smoke test on `/work-log`.
 
 ## Validation
 
@@ -77,3 +80,6 @@
 - T8 validation: `npm run lint` passed; `npm run build` passed. Local browser validation on port 3008 confirmed homepage Office Room cards are links to `/office/[room]`, the Supabase realtime status card is removed from the homepage, Coffee Corner shows four selectable voice rooms, selecting the AI Builder room changes the deterministic meeting room to `coffee-ai-builders`, and Elevator Stage shows a clear waiting label instead of an unexplained blank panel.
 - T8 production validation: Vercel deployed commit `f79f048`; production Coffee Corner showed the multi-room voice room list, production homepage exposed `/office/[room]` card links and no realtime configuration card, and production Elevator Stage showed the explicit `STAGE WAITING` state.
 - T8 remaining gap: multi-device validation has not been run yet for the new per-room Coffee Presence channels.
+- T9 validation: `npm run lint` passed; `npm run build` passed, `/work-log` compiles as a static route. Local browser validation on port 5301 confirmed: clocking in and out archives the session into history with `endReason: "clockedOut"` and a linked `shipId`; clocking into a different room without clocking out archives the abandoned session with `endReason: "switchedSession"`; `/work-log` renders the in-progress session, switched session, and clocked-out session with correct room/goal/duration; the forest shows one tree per ship and one sprout per completed desk check with correct milestone countdown text; `/ship-wall` is unaffected; the demo reset button clears the new `founders-floor:session-history:v1` key along with the existing keys; 375px mobile width shows no horizontal overflow with the added nav item.
+- T9 remaining gap: not yet deployed to Vercel; no production validation yet.
+- T9 judge-demo validation: `npm run lint` passed; `npm run build` passed. Cleared localStorage to simulate a first-time judge visit: `/work-log` showed 15 pre-planted trees (9 ship-trees + 6 desk-check sprouts) with an 11-entry clock-in history spanning ~4 days, `/ship-wall` showed the 9 seeded ships, and the homepage no longer has a reset control. Performed one real Clock In -> Clock Out cycle on top of the seeded state and confirmed it appended (10 ships, 12 history entries, 16 trees) instead of overwriting the seed.

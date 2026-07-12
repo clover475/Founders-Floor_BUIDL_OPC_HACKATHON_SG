@@ -1,6 +1,6 @@
 {
   "language": { "english": "English", "chinese": "Chinese", "switchTo": "Switch to {language}" },
-  "nav": { "floor": "Floor", "coffee": "Coffee", "elevator": "Elevator", "clockOut": "Clock out" },
+  "nav": { "floor": "Floor", "coffee": "Coffee", "elevator": "Elevator", "workLog": "Work log", "clockOut": "Clock out" },
   "rooms": {
     "idea": { "name": "Idea Room", "description": "Explore opportunities, user problems, and rough founder ideas." },
     "build": { "name": "Build Room", "description": "Work around other builders who are shipping MVPs today." },
@@ -10,8 +10,7 @@
   "home": {
     "tagline": "The office for one-person companies",
     "description": "Clock in, see who else is building, ask for a ten-minute desk check, and clock out with something shipped.",
-    "clockIn": "Clock in",
-    "reset": "Reset demo data"
+    "clockIn": "Clock in"
   },
   "clockIn": {
     "eyebrow": "Clock In",
@@ -159,6 +158,30 @@
     "helpedPlaceholder": "Mia, Alex, or the Feedback Room",
     "publish": "Clock out and publish to Ship Wall",
     "defaultEvidence": "Progress submitted from Founders' Floor."
+  },
+  "workLog": {
+    "eyebrow": "Work Log",
+    "title": "Your clock-ins and your forest",
+    "description": "Every clock-in is kept here, and every finished piece of work plants a tree. The forest grows with what you finish, not with the clock.",
+    "clockInCta": "Clock in",
+    "forestTitle": "Achievement forest",
+    "forestCount": "{count, plural, =0 {No trees yet} =1 {# tree} other {# trees}}",
+    "forestDescription": "Each ship plants a tree. Each completed desk check plants a sprout. Nothing here withers.",
+    "forestEmpty": "Ship your first piece of work or complete a desk check to plant your first tree.",
+    "treeShipLabel": "Shipped",
+    "treeDeskCheckLabel": "Desk check completed",
+    "nextMilestone": "{count} more to reach {milestone} trees",
+    "milestoneMax": "You have grown past every milestone. Keep going.",
+    "historyTitle": "Clock-in history",
+    "historyDescription": "Past work sessions, kept even after you clock out or switch rooms.",
+    "historyEmpty": "No clock-ins yet. Clock in to start your first record.",
+    "statusActive": "In progress",
+    "statusCompleted": "Clocked out",
+    "statusSwitched": "Switched room",
+    "clockedInAt": "Clocked in {date}",
+    "sessionMeta": "{date} · {duration}",
+    "durationMinutes": "{count, plural, =1 {# min} other {# min}}",
+    "durationUnknown": "duration unknown"
   },
   "shipWall": {
     "eyebrow": "Ship Wall",

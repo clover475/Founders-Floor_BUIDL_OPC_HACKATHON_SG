@@ -24,6 +24,14 @@ export type FounderSession = {
   checkedInAt: string;
 };
 
+export type SessionEndReason = "clockedOut" | "switchedSession";
+
+export type SessionRecord = FounderSession & {
+  clockedOutAt: string;
+  endReason: SessionEndReason;
+  shipId?: string;
+};
+
 export type Coworker = {
   participantId: string;
   nickname: string;

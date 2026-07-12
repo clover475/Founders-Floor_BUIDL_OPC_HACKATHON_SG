@@ -5,7 +5,7 @@ import { ArrowRight, HelpCircle, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
 import { createLocalId, getOrCreateParticipant, saveParticipantNickname } from "@/lib/identity";
-import { loadSession, saveSession } from "@/lib/storage/repository";
+import { archiveSession, loadSession, saveSession } from "@/lib/storage/repository";
 import type { Activity, FounderSession, RoomId } from "@/types/domain";
 
 const roomIds: RoomId[] = ["idea", "build", "feedback", "growth"];
@@ -41,6 +41,11 @@ export function ClockInForm() {
     const participant = getOrCreateParticipant();
     const displayName = nickname.trim() || participant.nickname;
     saveParticipantNickname(displayName);
+
+    const existing = loadSession();
+    if (existing && existing.room !== room) {
+      archiveSession(existing, "switchedSession");
+    }
 
     const session: FounderSession = {
       sessionId: createLocalId("session"),

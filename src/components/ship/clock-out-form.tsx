@@ -5,7 +5,7 @@ import { DoorOpen } from "lucide-react";
 import { useTranslations } from "use-intl";
 import { useEffect, useState } from "react";
 import { createLocalId } from "@/lib/identity";
-import { clearSession, loadSession, loadShips, saveShips } from "@/lib/storage/repository";
+import { archiveSession, clearSession, loadSession, loadShips, saveShips } from "@/lib/storage/repository";
 import type { FounderSession } from "@/types/domain";
 
 export function ClockOutForm() {
@@ -32,9 +32,10 @@ export function ClockOutForm() {
     }
 
     const ships = loadShips();
+    const shipId = createLocalId("ship");
     saveShips([
       {
-        id: createLocalId("ship"),
+        id: shipId,
         sessionId: session.sessionId,
         title: title.trim() || session.goal,
         evidence: evidence.trim() || t("defaultEvidence"),
@@ -44,6 +45,7 @@ export function ClockOutForm() {
       },
       ...ships,
     ]);
+    archiveSession(session, "clockedOut", shipId);
     clearSession();
     router.push("/ship-wall");
   }
