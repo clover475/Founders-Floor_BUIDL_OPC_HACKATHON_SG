@@ -166,13 +166,19 @@
     "defaultEvidence": "已从 Founders' Floor 提交进展。"
   },
   "shipWall": {
-    "eyebrow": "成果墙",
-    "title": "让进展被人看见",
-    "new": "开始新的工作时段",
+    "eyebrow": "共建社区",
+    "title": "请求与成果墙",
+    "new": "开始上班",
+    "deskCheckEyebrow": "大家都在请求什么",
+    "deskCheckTitle": "请求墙",
+    "helpAndEarn": "帮助并获得积分",
     "meta": "{room} · {date}",
     "helped": "由 {name} 提供帮助",
-    "noneTitle": "还没有成果",
-    "noneDescription": "先开始上班，需要时请同事快速检查，再把一项看得见的进展发布到这里。"
+    "noneTitle": "还没有人交付成果",
+    "noneDescription": "成为今天第一个下班并展示成果的人吧。",
+    "noDeskChecks": "当前没有活跃的请求，大家都在专注 Build！",
+    "shipEyebrow": "已交付成果",
+    "shipTitle": "成果墙"
   },
   "meeting": {
     "audio": "音频和视频默认静音。在现场请使用耳机。",

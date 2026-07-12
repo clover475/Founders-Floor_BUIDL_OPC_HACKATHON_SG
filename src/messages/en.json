@@ -166,13 +166,19 @@
     "defaultEvidence": "Progress submitted from Founders' Floor."
   },
   "shipWall": {
-    "eyebrow": "Ship Wall",
-    "title": "Progress people can see",
-    "new": "New work session",
-    "meta": "{room} room · {date}",
-    "helped": "helped by {name}",
-    "noneTitle": "No ships yet",
-    "noneDescription": "Clock in, ask for a desk check if needed, then publish one visible piece of progress here."
+    "eyebrow": "Community Board",
+    "title": "Community Board",
+    "new": "New",
+    "deskCheckEyebrow": "Requests",
+    "deskCheckTitle": "Desk Checks",
+    "helpAndEarn": "Help & Earn Points",
+    "meta": "in {room} on {date}",
+    "helped": "Helped by {name}",
+    "noneTitle": "No ships yet.",
+    "noneDescription": "Be the first to clock out and ship something today.",
+    "noDeskChecks": "No active desk checks. Everyone is focused!",
+    "shipEyebrow": "Shipped",
+    "shipTitle": "Ship Wall"
   },
   "meeting": {
     "audio": "Audio and video start muted. Use headphones in the venue.",

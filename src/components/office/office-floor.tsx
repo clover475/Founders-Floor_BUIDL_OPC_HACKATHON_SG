@@ -167,14 +167,19 @@ export function OfficeFloor({ roomId }: { roomId: RoomId }) {
           {t("clockOut")}
         </Link>
 
-        <div className="border border-floor-line bg-white/60 p-4">
-          <p className="text-sm font-semibold text-floor-ink">{t("deskChecks")}</p>
+        <Link href="/ship-wall" className="group block border border-floor-line bg-white/60 p-4 transition-colors hover:bg-white">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-floor-ink">{t("deskChecks")}</p>
+            <span className="text-xs font-medium text-floor-green opacity-0 transition-opacity group-hover:opacity-100">
+              View all →
+            </span>
+          </div>
           <p className="mt-2 text-sm text-floor-muted">
             {deskChecks.length
               ? t("saved", { count: deskChecks.length, status: deskChecks[deskChecks.length - 1].status })
               : t("none")}
           </p>
-        </div>
+        </Link>
       </aside>
     </main>
   );
