@@ -18,6 +18,7 @@
     "title": "Choose your floor for today",
     "description": "You can join with a product, an idea, or just a direction you want to explore. Project information is optional.",
     "displayName": "Display name",
+    "region": "Where are you building from?",
     "project": "Project or idea, optional",
     "projectPlaceholder": "Leave this blank if you are exploring",
     "goal": "Today I want to finish",

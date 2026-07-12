@@ -18,6 +18,7 @@
     "title": "选择你今天的办公区",
     "description": "你可以带着产品、想法，或一个想探索的方向加入。项目信息不是必填项。",
     "displayName": "显示名称",
+    "region": "你在哪里创业？",
     "project": "产品或想法（选填）",
     "projectPlaceholder": "如果还在探索，可以留空",
     "goal": "我今天想完成",
