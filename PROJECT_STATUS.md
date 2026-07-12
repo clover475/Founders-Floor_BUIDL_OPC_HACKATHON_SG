@@ -3,7 +3,7 @@
 ## Snapshot
 
 - Current milestone: Global-ready public launch candidate with live Office Floor, Coffee Corner, and Elevator Stage
-- Current health: T1-T6 passed their local checks; T7 live Office Floor presence is implemented with local/demo fallback; production validation is still needed after Vercel deploy; T3 fifth-seat cap still needs a real five-device check
+- Current health: T1-T6 passed their local checks; T7 live Office Floor presence is deployed and single-browser production validation passed; T3 fifth-seat cap still needs a real five-device check
 - Last updated: 2026-07-12
 
 ## Completed
@@ -45,7 +45,7 @@
 
 ## Next steps
 
-1. Deploy T7 to Vercel and run a two-browser Office Floor presence smoke test.
+1. Run a two-browser Office Floor presence smoke test.
 2. Run the public-launch safety pass before broad social distribution.
 3. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
 4. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
@@ -71,4 +71,5 @@
 - T6 validation: `npm run lint` passed; `npm run build` passed; translation hard-code scan found only brand metadata, the name example, and the language control labels. Browser validation confirmed English-to-Chinese and Chinese-to-English switching, Chinese preference persistence across navigation, translated Coffee Corner content, and a 390px Clock In layout with `scrollWidth` equal to `innerWidth`.
 - T6 production validation: Vercel deployed commit `56f057e`; a Chinese-browser visit opened in Chinese, switching to English updated the full navigation, and the English choice persisted when navigating to Coffee Corner. Supabase remained configured on the production homepage.
 - T7 validation: `npm run lint` passed; `npm run build` passed. Local browser validation on port 3007 confirmed that a visitor without an active Clock In session sees only demo-marked seeded coworkers, and a clocked-in user appears in the selected room with a local fallback badge when Supabase variables are unavailable locally.
-- T7 remaining gap: production two-browser Office Floor presence has not been run yet because the T7 commit has not been deployed to Vercel.
+- T7 production validation: Vercel deployed commit `31331c9`; `/office/idea` showed `LIVE FLOOR CONNECTED` and demo-marked seeded coworkers. A production Clock In showed the current browser as `LIVE` in Idea Room and kept seeded coworkers marked `DEMO`.
+- T7 remaining gap: two isolated browsers/devices have not yet been used to confirm that two distinct Office Floor participants see each other within five seconds.
