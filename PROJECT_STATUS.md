@@ -3,7 +3,7 @@
 ## Snapshot
 
 - Current milestone: Global-ready public launch candidate with clickable Office Rooms, multi-room Coffee Corner, and Elevator Stage
-- Current health: T1-T8 pass local lint/build checks; T8 launch UX repairs are implemented locally and need Vercel deployment validation; Coffee fifth-seat cap still needs a real five-device check
+- Current health: T1-T8 pass local lint/build checks; T8 launch UX repairs are deployed and production single-browser validation passed; Coffee fifth-seat cap still needs a real five-device check
 - Last updated: 2026-07-12
 
 ## Completed
@@ -46,11 +46,10 @@
 
 ## Next steps
 
-1. Deploy T8 to Vercel and smoke test homepage navigation, Coffee room selection, and Elevator waiting state.
-2. Run a two-browser Office Floor and Coffee room presence smoke test.
-3. Run the public-launch safety pass before broad social distribution.
-4. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
-5. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
+1. Run a two-browser Office Floor and Coffee room presence smoke test.
+2. Run the public-launch safety pass before broad social distribution.
+3. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
+4. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
 
 ## Validation
 
@@ -76,4 +75,5 @@
 - T7 production validation: Vercel deployed commit `31331c9`; `/office/idea` showed `LIVE FLOOR CONNECTED` and demo-marked seeded coworkers. A production Clock In showed the current browser as `LIVE` in Idea Room and kept seeded coworkers marked `DEMO`.
 - T7 remaining gap: two isolated browsers/devices have not yet been used to confirm that two distinct Office Floor participants see each other within five seconds.
 - T8 validation: `npm run lint` passed; `npm run build` passed. Local browser validation on port 3008 confirmed homepage Office Room cards are links to `/office/[room]`, the Supabase realtime status card is removed from the homepage, Coffee Corner shows four selectable voice rooms, selecting the AI Builder room changes the deterministic meeting room to `coffee-ai-builders`, and Elevator Stage shows a clear waiting label instead of an unexplained blank panel.
-- T8 remaining gap: production deployment and multi-device validation have not been run yet.
+- T8 production validation: Vercel deployed commit `f79f048`; production Coffee Corner showed the multi-room voice room list, production homepage exposed `/office/[room]` card links and no realtime configuration card, and production Elevator Stage showed the explicit `STAGE WAITING` state.
+- T8 remaining gap: multi-device validation has not been run yet for the new per-room Coffee Presence channels.
