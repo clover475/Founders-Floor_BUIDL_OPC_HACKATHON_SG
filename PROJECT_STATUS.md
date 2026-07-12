@@ -44,8 +44,8 @@
 
 ## Next steps
 
-1. Push T6 and let Vercel redeploy the production site.
-2. Repeat language switching and the Coffee/Elevator smoke test on the production URL.
+1. Run the public-launch safety pass before broad social distribution.
+2. Repeat the Coffee/Elevator smoke test immediately before posting launch links.
 3. If time remains, run the Coffee Corner fifth-seat check with five isolated devices/browsers.
 
 ## Validation
@@ -67,4 +67,4 @@
 - Production validation: homepage showed `Configured` and no local fallback. Coffee Corner passed two-browser realtime sync: both browsers connected, seat count moved from 0/4 to 1/4 to 2/4, both saw the same deterministic Jitsi room, and both loaded an iframe. Elevator Stage passed two-browser realtime sync: one browser started a round, the other saw the live pitch, joined as audience, submitted feedback, and the speaker result card updated to 1 understood / 1 follow-up / 1 user signal with the audience question. Reset returned both browsers to Stage open, and the second browser successfully started a new round.
 - Remaining gap: Coffee Corner fifth-seat cap has not been tested with five isolated identities in production.
 - T6 validation: `npm run lint` passed; `npm run build` passed; translation hard-code scan found only brand metadata, the name example, and the language control labels. Browser validation confirmed English-to-Chinese and Chinese-to-English switching, Chinese preference persistence across navigation, translated Coffee Corner content, and a 390px Clock In layout with `scrollWidth` equal to `innerWidth`.
-- T6 remaining gap: production Vercel redeploy and production-language smoke test are still pending.
+- T6 production validation: Vercel deployed commit `56f057e`; a Chinese-browser visit opened in Chinese, switching to English updated the full navigation, and the English choice persisted when navigating to Coffee Corner. Supabase remained configured on the production homepage.
