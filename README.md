@@ -16,350 +16,90 @@
 
 ---
 
-## Overview
+## What it is
 
-**Founders’ Floor is an online workplace and hands-on community for one-person company founders and independent builders, with a virtual office as its daily entry point.**
+Founders’ Floor is an online workplace and hands-on community for one-person company founders and independent builders.
 
-AI now allows one person to take on product, design, development, marketing, and operations. However, it does not give a solo founder an office, coworkers, or a consistent environment for shared work, quick feedback, and everyday connection.
-
-Founders’ Floor brings distributed founders into the same virtual space. Members can:
-
-- clock in and define what they want to complete;
-- enter themed office rooms;
-- see what other founders are working on;
-- request a quick Desk Check;
-- test each other’s products;
-- take shared breaks;
-- practise an Elevator Pitch with AI feedback;
-- clock out by posting what they shipped.
-
-The current hackathon MVP focuses on the daily virtual-office experience.
-
-In the longer term, Founders’ Floor will grow into an annual, hands-on OPC community with recurring Sprints, topic forums, real founder case studies, opportunity and playbook libraries, product testing, resource exchange, contribution records, and online and offline events.
+It gives solo founders both a place to work and a place to take a break, interact, and receive lightweight feedback from other builders.
 
 ---
 
-## Why Founders’ Floor?
+## Why it matters
 
-Solo founders are becoming more capable, but not necessarily more connected.
+AI has made solo founders more productive, but it has not given them coworkers, shared routines, or the informal moments that normally happen in an office.
 
-One person can now perform work that previously required several specialised roles. This improvement is mainly vertical: individuals can cover more functions, but they do not automatically gain more horizontal relationships or a stronger working environment.
-
-Many solo founders still work alone from home, cafés, or temporary spaces. They often lack:
-
-- coworkers who understand what they are building;
-- quick feedback on small decisions;
-- early product testers;
-- outside perspectives on important choices;
-- a shared rhythm for starting, pausing, and finishing work;
-- people who notice and respond to what they complete;
-- a sustained flow of experience, resources, and opportunities.
-
-This creates more than emotional loneliness.
-
-Small questions remain unresolved, decisions become increasingly isolated, products are built for too long without feedback, and momentum becomes difficult to sustain.
-
-Virtual study rooms mainly provide shared focus. Traditional founder communities mainly provide asynchronous content, networking, and short-term events.
-
-**Founders’ Floor brings the community into the founder’s everyday workflow.**
+Founders’ Floor recreates those everyday moments online: working alongside others, asking for quick help, taking a short break, practising how to explain an idea, and making progress visible.
 
 ---
 
-## Core Experience
+## Core flow
 
 ```text
 Clock In
-→ Choose a Room
-→ See Other Founders
-→ Build
-→ Ask for a Desk Check
-→ Take a Shared Break
-→ Practise a Pitch
-→ Clock Out
-→ Ship and Celebrate
+→ Choose a Work Room
+→ Build Alongside Others
+→ Visit the Break Room
+→ Join a Lightweight Activity
+→ Return to Work
+→ Clock Out and Share What You Shipped
 ```
 
 ---
 
-## The Floor
+## Break Room Experiences
 
-| Space | Purpose |
-|---|---|
-| **Idea Room** | Explore opportunities, discuss early ideas, and define user problems |
-| **Build Room** | Work on prototypes, MVPs, and technical challenges |
-| **Feedback Room** | Review positioning, landing pages, onboarding, and product flows |
-| **Growth Room** | Work on users, launch, sales, pricing, and distribution |
-| **Break Room** | Take a shared break and join lightweight founder activities |
+The Break Room is not another work area. It is a lightweight social space designed to help founders pause, interact, and return to work with more energy and clarity.
 
----
+### AI Elevator Pitch Coach
 
-## Key Features
-
-### Clock In
-
-Founders choose their current stage, enter a themed room, and define one meaningful goal for the session.
-
-No existing company or product is required.
-
-Members can join while they are:
-
-- exploring;
-- developing an idea;
-- building;
-- launching;
-- operating an existing business.
-
----
-
-### Coworker Presence
-
-Members can see:
-
-- who is currently working;
-- what they are building;
-- what they want to finish;
-- whether they are focused, open to chat, or looking for feedback.
-
-Founders’ Floor does not require constant conversation.
-
-The goal is to create the feeling that:
-
-> Other founders are nearby, and interaction is available when needed.
-
----
-
-### Desk Check
-
-Desk Check recreates one of the simplest interactions in a real office:
-
-> “Can you take a quick look?”
-
-A founder can ask for lightweight help with:
-
-- a one-line pitch;
-- a landing page;
-- an onboarding flow;
-- a target-user definition;
-- two competing product directions;
-- a pricing or outreach message.
-
-Desk Check is not formal consulting. It is fast, low-friction peer feedback.
-
----
-
-### Shared Breaks
-
-The Break Room helps founders step away from long periods of isolated work.
-
-Members can:
-
-- stand up and stretch;
-- walk or get water;
-- see how many people are taking a break together;
-- join lightweight activities such as Elevator Pitch;
-- return to work with a clearer state of mind.
-
-The games are not the core product. They recreate the informal, low-pressure moments that normally happen around an office kitchen or coffee area.
-
----
-
-## AI Elevator Pitch Coach
-
-The current MVP includes an **AI Elevator Pitch Coach**.
-
-Users can record or enter a:
-
-- Product Pitch;
-- Idea Pitch;
-- Founder Pitch.
+Users can record or enter a Product, Idea, or Founder Pitch.
 
 The AI:
 
-1. restates what a listener is likely to understand;
-2. evaluates whether the pitch clearly communicates:
-   - the target user;
-   - the problem;
-   - the solution;
-   - the call to action;
-3. reviews basic delivery indicators such as:
-   - duration;
-   - word count;
-   - filler words;
-4. identifies one priority improvement;
-5. generates a clearer 30-second version without inventing users, revenue, traction, data, or product capabilities.
+- checks whether the pitch clearly explains the target user, problem, solution, and call to action;
+- reviews basic delivery signals such as duration, word count, and filler words;
+- gives one priority improvement;
+- creates a clearer 30-second rewrite without inventing facts.
 
-The goal is not to replace human coworkers with AI.
+### K-PLAY Coffee Break
 
-AI provides a fast, structured first review so founders can identify communication gaps before sharing the pitch with other people.
+K-PLAY is a lightweight coffee-break experience inside the Break Room.
 
-In the longer-term version, other founders will also be able to submit peer feedback such as:
-
-- I understood it;
-- I want to know more;
-- I might be a user;
-- I know someone who may need this;
-- my first question is...
-
-AI will then synthesise this peer feedback into concrete next actions.
+It gives founders a simple reason to step away from isolated work, join a short shared interaction, and reconnect with the people working on the same floor before returning to their tasks.
 
 ---
 
-## Clock Out and Ship Wall
+## Current MVP
 
-At the end of a work session, users post what actually changed.
+The current demo includes:
 
-Examples include:
-
-- an idea clarified;
-- a decision made;
-- a landing page updated;
-- a user interview completed;
-- a product tested;
-- an outreach message sent;
-- a feature shipped;
-- a first user found;
-- a first payment attempted.
-
-The result is added to the Ship Wall.
-
-Users can also record:
-
-- who helped them;
-- what changed after the feedback;
-- what they plan to do next.
-
-Founders’ Floor does not only track how long someone worked.
-
-It asks:
-
-> What actually moved forward today?
-
----
-
-## Current Hackathon MVP
-
-The current version includes:
-
-- virtual office landing page and lobby;
-- Clock In flow;
+- Clock In and Clock Out;
 - Idea, Build, Feedback, and Growth rooms;
-- founder task and work-status cards;
-- Desk Check entry point;
+- founder task and status cards;
+- Desk Check;
 - Break Room;
-- shared-break experience;
-- Elevator Pitch recording or text input;
-- AI pitch analysis;
-- Clock Out;
+- AI Elevator Pitch Coach;
+- K-PLAY Coffee Break;
 - Ship Wall;
-- seeded demo members;
-- local data persistence.
+- demo member data and local progress storage.
 
-Some member information and community interactions currently use demonstration data.
-
-The MVP is designed to validate one complete experience:
-
-> Will solo founders enter a shared online space, make their work visible, receive lightweight feedback, and leave with a real outcome?
+Some members and interactions currently use demonstration data.
 
 ---
 
-## Demo Flow
+## Product vision
 
-1. Open the Founders’ Floor lobby.
-2. Click **Clock In**.
-3. Choose your current founder stage.
-4. Select a themed room.
-5. Enter what you are working on and what you want to finish.
-6. View other founders currently on the floor.
-7. Create or review a Desk Check.
-8. Enter the Break Room.
-9. Record or enter an Elevator Pitch.
-10. Review the AI feedback and rewritten version.
-11. Click **Clock Out**.
-12. Post what you completed.
-13. View the result on the Ship Wall.
+Founders’ Floor starts with a virtual office, but the long-term goal is to build a hands-on community for one-person companies.
+
+The platform will combine daily coworking, lightweight social interaction, product feedback, recurring OPC Sprints, Founder Crews, and resource exchange.
 
 ---
 
-## Product Vision
-
-Founders’ Floor begins as a virtual office, but the long-term product is not only a coworking tool.
-
-It will become a hands-on community for building and operating one-person companies.
-
-### Daily Workplace
-
-- virtual offices;
-- coworker presence;
-- quick peer help;
-- product testing;
-- shared breaks;
-- founder communication tools;
-- visible daily outcomes.
-
-### OPC Sprints
-
-Recurring action programmes for stages such as:
-
-- Opportunity Discovery;
-- Idea Validation;
-- MVP;
-- First Users;
-- Launch;
-- First Revenue;
-- Distribution;
-- Automation.
-
-### Community Infrastructure
-
-- topic forums;
-- stable Founder Crews;
-- product-testing communities;
-- real founder case studies;
-- opportunity and playbook libraries;
-- resource exchange;
-- contribution and trust records;
-- online and offline events.
-
-The intended member journey is:
-
-```text
-Explore
-→ Form an Idea
-→ Validate
-→ Build
-→ Launch
-→ Gain Users
-→ Generate Revenue
-→ Operate a Sustainable OPC
-```
-
----
-
-## Business Model
+## Business model
 
 Founders’ Floor plans to use a freemium membership model.
 
-Selected public virtual offices, shared breaks, and basic interactions will remain free to reduce the entry barrier and help users build a habit of participation.
-
-The primary revenue source will be an annual OPC community membership, including:
-
-- full access to topic communities;
-- long-term work and progress history;
-- AI founder communication tools;
-- recurring OPC Sprints;
-- stable Founder Crews;
-- product testing;
-- case and opportunity libraries;
-- member events;
-- resource exchange.
-
-The platform may also offer:
-
-- focused paid Sprints for stages such as Idea Validation, MVP, First Users, Launch, and First Revenue;
-- a curated premium Founder Circle for members with an existing product, users, or revenue;
-- selected partnerships with AI tools, cloud providers, and coworking spaces.
-
-The early-stage priority is to validate retention, community interaction, and willingness to pay for sustained founder support.
+Basic public office and Break Room experiences will remain free. Revenue will mainly come from annual OPC memberships, paid Sprints, and premium Founder Circles for members seeking deeper peer support, product feedback, and long-term founder relationships.
 
 ---
 
