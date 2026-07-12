@@ -15,7 +15,10 @@
 
 **🏆 Built for BUIDL OPC Hackathon SG**
 
-*Proudly supported by our incredible sponsors and partners (Add sponsor logos/names here)*
+*Proudly co-hosted by:*<br />
+![AMBER](https://img.shields.io/badge/AMBER-111111?style=for-the-badge)
+![Claude SG community](https://img.shields.io/badge/Claude_SG_community-D97757?style=for-the-badge)
+![Lifelong Learning SG](https://img.shields.io/badge/Lifelong_Learning_SG-ffffff?style=for-the-badge&labelColor=111111&color=ffffff)
 
 </div>
 
