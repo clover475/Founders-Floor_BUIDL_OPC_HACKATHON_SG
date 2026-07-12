@@ -7,15 +7,18 @@ export type PitchAnalysisRequest = {
   durationSeconds: number;
 };
 
-export type StructureRating = "clear" | "partial" | "missing";
+export type StructureScore = {
+  score: number; // 0-10
+  note: string;  // one-line coaching note
+};
 
 export type PitchAnalysisResult = {
   summary: string;
   structure: {
-    targetUser: StructureRating;
-    problem: StructureRating;
-    solution: StructureRating;
-    callToAction: StructureRating;
+    targetUser: StructureScore;
+    problem: StructureScore;
+    solution: StructureScore;
+    callToAction: StructureScore;
   };
   priorityImprovement: string;
   suggestedRewrite: string;
@@ -28,10 +31,10 @@ const DEMO_RESULT_EN: PitchAnalysisResult = {
   summary:
     "A listener would understand that this founder is building something for a broad audience, but the specific user and problem remain unclear.",
   structure: {
-    targetUser: "partial",
-    problem: "partial",
-    solution: "partial",
-    callToAction: "missing",
+    targetUser: { score: 5, note: "Broad audience mentioned but no specific persona named" },
+    problem:    { score: 4, note: "Pain point implied but not stated directly" },
+    solution:   { score: 6, note: "Product described but the key differentiator is vague" },
+    callToAction: { score: 1, note: "No clear next step or ask given" },
   },
   priorityImprovement:
     "Name your target user in the first sentence. Who specifically has this problem every day?",
@@ -44,10 +47,10 @@ const DEMO_RESULT_ZH: PitchAnalysisResult = {
   summary:
     "听众会理解这位创业者在做某件和创业者相关的事，但目标用户和具体问题还不清晰。",
   structure: {
-    targetUser: "partial",
-    problem: "partial",
-    solution: "partial",
-    callToAction: "missing",
+    targetUser: { score: 5, note: "提到创业者群体，但没有具体描述是哪类人" },
+    problem:    { score: 4, note: "痛点有所暗示，但未直接说明" },
+    solution:   { score: 6, note: "产品有描述，但核心差异点不够清晰" },
+    callToAction: { score: 1, note: "没有明确的下一步行动号召" },
   },
   priorityImprovement:
     "在第一句话中点名你的目标用户。具体是谁每天面对这个问题？",
@@ -63,26 +66,28 @@ Do not invent users, traction, revenue, evidence, partnerships, or product featu
 
 First, explain in one sentence what a listener would understand from the pitch.
 
-Then evaluate only four elements:
-1. Target user
-2. Problem
-3. Solution
-4. Call to action
+Then score exactly four elements on a scale of 0 to 10:
+1. targetUser  — how clearly the specific target user is identified
+2. problem     — how clearly the problem they face is stated
+3. solution    — how clearly the product/solution is explained
+4. callToAction — how clear and concrete the ask or next step is
 
-Each element must be rated as exactly one of: "clear", "partial", or "missing".
+For each element provide:
+- score: integer 0-10
+- note: one short coaching sentence (max 12 words) explaining the score
 
-Give only one priority improvement — the single most important thing to fix in the next attempt.
+Give only one priority improvement — the single most important thing to fix.
 
-Rewrite the pitch into a clearer 30-second version (approximately 75 words) while preserving the founder's original facts and intent. Do not add invented facts.
+Rewrite the pitch into a clearer 30-second version (~75 words) preserving the founder's original facts. Do not add invented facts.
 
-Return ONLY valid JSON matching this exact schema, with no markdown fences or extra text:
+Return ONLY valid JSON with this exact schema, no markdown fences:
 {
   "summary": "string",
   "structure": {
-    "targetUser": "clear | partial | missing",
-    "problem": "clear | partial | missing",
-    "solution": "clear | partial | missing",
-    "callToAction": "clear | partial | missing"
+    "targetUser":   { "score": 0-10, "note": "string" },
+    "problem":      { "score": 0-10, "note": "string" },
+    "solution":     { "score": 0-10, "note": "string" },
+    "callToAction": { "score": 0-10, "note": "string" }
   },
   "priorityImprovement": "string",
   "suggestedRewrite": "string"

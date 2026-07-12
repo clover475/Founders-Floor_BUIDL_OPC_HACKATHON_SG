@@ -3,8 +3,6 @@
 import {
   AlertCircle,
   ArrowLeft,
-  CheckCircle2,
-  Circle,
   Clock,
   Loader2,
   Mic,
@@ -15,7 +13,7 @@ import {
   Type,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PitchAnalysisResult, StructureRating } from "@/app/api/analyse-pitch/route";
+import type { PitchAnalysisResult, StructureScore } from "@/app/api/analyse-pitch/route";
 import { computeLocalMetrics } from "@/lib/pitch/analyse";
 import Link from "next/link";
 
@@ -44,6 +42,7 @@ interface SpeechRecognition extends EventTarget {
 }
 
 interface SpeechRecognitionEvent extends Event {
+  resultIndex: number;
   results: SpeechRecognitionResultList;
 }
 
@@ -63,23 +62,38 @@ interface SpeechRecognitionAlternative {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-const RATING_CONFIG: Record<
-  StructureRating,
-  { icon: typeof CheckCircle2; color: string; label: string }
-> = {
-  clear: { icon: CheckCircle2, color: "text-floor-green", label: "Clear" },
-  partial: { icon: Circle, color: "text-amber-500", label: "Partial" },
-  missing: { icon: AlertCircle, color: "text-red-400", label: "Missing" },
-};
+function scoreColor(score: number): string {
+  if (score >= 8) return "bg-floor-green";
+  if (score >= 5) return "bg-amber-400";
+  return "bg-red-400";
+}
 
-function StructureBadge({ rating }: { rating: StructureRating }) {
-  const cfg = RATING_CONFIG[rating];
-  const Icon = cfg.icon;
+function scoreTextColor(score: number): string {
+  if (score >= 8) return "text-floor-green";
+  if (score >= 5) return "text-amber-500";
+  return "text-red-500";
+}
+
+function ScoreBar({ label, data }: { label: string; data: StructureScore }) {
+  const pct = Math.round((data.score / 10) * 100);
   return (
-    <span className={`inline-flex items-center gap-1 text-xs font-medium ${cfg.color}`}>
-      <Icon size={13} />
-      {cfg.label}
-    </span>
+    <div className="space-y-1.5 border border-floor-line bg-floor-panel px-4 py-3">
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-sm font-medium text-floor-ink">{label}</span>
+        <span className={`text-sm font-bold tabular-nums ${scoreTextColor(data.score)}`}>
+          {data.score}
+          <span className="ml-0.5 text-xs font-normal text-floor-muted">/10</span>
+        </span>
+      </div>
+      {/* progress bar */}
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-floor-line">
+        <div
+          className={`h-full rounded-full transition-all ${scoreColor(data.score)}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <p className="text-xs leading-5 text-floor-muted">{data.note}</p>
+    </div>
   );
 }
 
@@ -98,12 +112,13 @@ export function PitchCoach() {
   const [stage, setStage] = useState<Stage>("record");
   const [language, setLanguage] = useState<Language>("en");
   const [transcript, setTranscript] = useState("");
+  const [interimText, setInterimText] = useState("");
   const [result, setResult] = useState<PitchAnalysisResult | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
 
   // ── recording state ──
   const [isRecording, setIsRecording] = useState(false);
-  const [elapsed, setElapsed] = useState(0); // seconds
+  const [elapsed, setElapsed] = useState(0);
   const [speechSupported, setSpeechSupported] = useState(false);
 
   // refs
@@ -116,36 +131,48 @@ export function PitchCoach() {
   const interimRef = useRef("");
 
   // ── speech recognition setup ──
+  // Re-initialise when language changes so lang attribute is correct
   useEffect(() => {
     const SpeechRecognitionCtor =
       window.SpeechRecognition ?? window.webkitSpeechRecognition;
-    if (SpeechRecognitionCtor) {
-      setSpeechSupported(true);
-      const rec = new SpeechRecognitionCtor();
-      rec.continuous = true;
-      rec.interimResults = true;
-      rec.lang = language === "zh" ? "zh-CN" : "en-US";
-      rec.onresult = (event: SpeechRecognitionEvent) => {
-        let interim = "";
-        let finalText = "";
-        for (let i = 0; i < event.results.length; i++) {
-          const res = event.results[i];
-          if (res.isFinal) {
-            finalText += res[0].transcript + " ";
-          } else {
-            interim += res[0].transcript;
-          }
+    if (!SpeechRecognitionCtor) return;
+
+    setSpeechSupported(true);
+    const rec = new SpeechRecognitionCtor();
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.lang = language === "zh" ? "zh-CN" : "en-US";
+
+    rec.onresult = (event: SpeechRecognitionEvent) => {
+      // IMPORTANT: start from event.resultIndex to avoid reprocessing
+      // already-finalised results (which caused empty transcript bug)
+      let newFinal = "";
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const res = event.results[i];
+        if (res.isFinal) {
+          newFinal += res[0].transcript + " ";
+        } else {
+          interim += res[0].transcript;
         }
-        interimRef.current = interim;
-        if (finalText) {
-          setTranscript((prev) => prev + finalText);
-        }
-      };
-      rec.onerror = () => {
-        /* silently ignore — user can type manually */
-      };
-      recognitionRef.current = rec;
-    }
+      }
+      // Show interim in real-time as greyed-out text
+      setInterimText(interim);
+      if (newFinal) {
+        setTranscript((prev) => prev + newFinal);
+      }
+    };
+
+    rec.onend = () => {
+      setInterimText("");
+    };
+
+    rec.onerror = () => {
+      setInterimText("");
+      /* silently ignore — user can type manually */
+    };
+
+    recognitionRef.current = rec;
   }, [language]);
 
   // ── countdown auto-stop at 45s ──
@@ -386,21 +413,34 @@ export function PitchCoach() {
 
           {/* Transcript panel */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-sm font-medium text-floor-ink">
-              <Type size={15} />
-              Transcript
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-medium text-floor-ink">
+                <Type size={15} />
+                Transcript
+              </div>
+              <span className="text-xs text-floor-muted">
+                {language === "zh" ? "支持实时语音转写或手动粘贴" : "Auto-transcribed or paste manually"}
+              </span>
             </div>
-            <textarea
-              value={transcript}
-              onChange={(e) => setTranscript(e.target.value)}
-              placeholder={
-                language === "zh"
-                  ? "录制时自动转写，或在此手动粘贴文字……"
-                  : "Auto-transcribed during recording, or paste manually here…"
-              }
-              rows={10}
-              className="w-full border border-floor-line bg-white px-3 py-3 text-sm leading-6 text-floor-ink outline-none focus:border-floor-green"
-            />
+            <div className="relative">
+              <textarea
+                value={transcript}
+                onChange={(e) => setTranscript(e.target.value)}
+                placeholder={
+                  language === "zh"
+                    ? "录制时自动转写，或在此手动粘贴文字……"
+                    : "Auto-transcribed during recording, or paste manually here…"
+                }
+                rows={10}
+                className="w-full border border-floor-line bg-white px-3 py-3 text-sm leading-6 text-floor-ink outline-none focus:border-floor-green relative z-10 bg-transparent"
+              />
+              {interimText && isRecording ? (
+                <div className="absolute inset-0 px-3 py-3 text-sm leading-6 text-floor-muted/50 pointer-events-none z-0 whitespace-pre-wrap overflow-hidden">
+                  {transcript}
+                  <span className="text-floor-muted/70">{interimText}</span>
+                </div>
+              ) : null}
+            </div>
             <button
               type="button"
               onClick={() => void handleAnalyse()}
@@ -610,15 +650,9 @@ export function PitchCoach() {
                       ["Problem", result.structure.problem],
                       ["Solution", result.structure.solution],
                       ["Call to Action", result.structure.callToAction],
-                    ] as [string, StructureRating][]
-                  ).map(([label, rating]) => (
-                    <div
-                      key={label}
-                      className="flex items-center justify-between border border-floor-line bg-floor-panel px-3 py-2"
-                    >
-                      <span className="text-sm text-floor-ink">{label}</span>
-                      <StructureBadge rating={rating} />
-                    </div>
+                    ] as [string, StructureScore][]
+                  ).map(([label, scoreData]) => (
+                    <ScoreBar key={label} label={label} data={scoreData} />
                   ))}
                 </div>
               </div>

@@ -21,10 +21,21 @@ export function getElevatorJitsiRoomName() {
 export function getJitsiMeetingUrl(roomName: string) {
   const { jitsiDomain } = getRealtimeConfig();
   const params = new URLSearchParams({
+    // Start muted by default to avoid echo
     "config.startWithAudioMuted": "true",
-    "config.startWithVideoMuted": "true",
-    "config.prejoinConfig.enabled": "true",
+    "config.startWithVideoMuted": "false",
+    // Skip the pre-join waiting room — enter directly
+    "config.prejoinConfig.enabled": "false",
+    // Disable the lobby (no host required to start)
+    "config.lobby.enabled": "false",
+    "config.lobby.autoKnock": "false",
+    // Clean up the UI
     "interfaceConfig.SHOW_JITSI_WATERMARK": "false",
+    "interfaceConfig.SHOW_BRAND_WATERMARK": "false",
+    "interfaceConfig.TOOLBAR_BUTTONS": JSON.stringify([
+      "microphone", "camera", "closedcaptions", "desktop",
+      "fullscreen", "fodeviceselection", "hangup", "chat", "raisehand", "tileview",
+    ]),
   });
 
   return `https://${jitsiDomain}/${encodeURIComponent(roomName)}#${params.toString()}`;
