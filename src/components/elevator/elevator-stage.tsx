@@ -1,8 +1,9 @@
 "use client";
 
-import { Check, MessageSquare, Mic2, RotateCcw, Save, Timer, UsersRound } from "lucide-react";
+import { Check, MessageSquare, Mic2, RotateCcw, Save, Sparkles, Timer, UsersRound } from "lucide-react";
 import { useTranslations } from "use-intl";
 import { useState } from "react";
+import Link from "next/link";
 import { JitsiMeeting } from "@/components/live/jitsi-meeting";
 import { getElevatorJitsiRoomName, getJitsiMeetingUrl } from "@/lib/live/jitsi";
 import { useElevatorStage } from "@/lib/realtime/use-elevator-stage";
@@ -247,6 +248,22 @@ export function ElevatorStage() {
             {t("reset")}
           </button>
         ) : null}
+
+        {/* ── AI Pitch Coach entry ── */}
+        <div className="border border-floor-line bg-white/80 p-4">
+          <p className="text-xs uppercase text-floor-muted mb-2">Practice Solo</p>
+          <p className="text-sm font-semibold text-floor-ink mb-1">AI Elevator Pitch Coach</p>
+          <p className="text-xs leading-5 text-floor-muted mb-3">
+            Record your pitch privately, get instant AI feedback on structure and clarity, then come back to present live.
+          </p>
+          <Link
+            href="/pitch-coach"
+            className="inline-flex min-h-10 w-full items-center justify-center gap-2 bg-floor-green px-4 text-sm font-medium text-white hover:opacity-90"
+          >
+            <Sparkles size={15} aria-hidden="true" />
+            Practice with AI Coach
+          </Link>
+        </div>
       </section>
 
       <section>

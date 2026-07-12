@@ -51,6 +51,7 @@ function createPresence(session: FounderSession): FloorPresence {
     room: session.room,
     activity: session.activity,
     goal: session.goal,
+    region: session.region,
     onlineAt: new Date().toISOString(),
   };
 }

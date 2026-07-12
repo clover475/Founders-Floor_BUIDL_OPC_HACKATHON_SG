@@ -21,6 +21,7 @@ export type FounderSession = {
   goal: string;
   helpNeed?: string;
   projectName?: string;
+  region?: string;
   checkedInAt: string;
 };
 
@@ -38,6 +39,7 @@ export type Coworker = {
   room: RoomId;
   activity: Activity;
   goal: string;
+  region?: string;
 };
 
 export type DeskCheckTemplate = {

@@ -6,6 +6,7 @@ export type FloorPresence = {
   room: RoomId;
   activity: Activity;
   goal?: string;
+  region?: string;
   onlineAt: string;
 };
 

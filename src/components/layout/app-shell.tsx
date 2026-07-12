@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Coffee, DoorOpen, Presentation, Rows3, TreeDeciduous } from "lucide-react";
+import { Coffee, DoorOpen, Presentation, Rows3, ShipWheel, TreeDeciduous } from "lucide-react";
 import { useTranslations } from "use-intl";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 
 const navItems = [
   { href: "/", label: "floor", icon: Rows3 },
+  { href: "/ship-wall", label: "community", icon: ShipWheel },
   { href: "/coffee-corner", label: "coffee", icon: Coffee },
   { href: "/elevator", label: "elevator", icon: Presentation },
   { href: "/work-log", label: "workLog", icon: TreeDeciduous },

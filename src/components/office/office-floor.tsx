@@ -9,11 +9,19 @@ import { useFloorPresence } from "@/lib/realtime/use-floor-presence";
 import { loadDeskChecks, loadSession } from "@/lib/storage/repository";
 import type { Coworker, DeskCheck, FounderSession, RoomId } from "@/types/domain";
 import type { FloorPresence } from "@/types/realtime";
+import { REGIONS } from "@/components/office/clock-in-form";
 
 type CoworkerCard = {
   coworker: Coworker;
   source: "live" | "local" | "demo";
 };
+
+function regionLabel(region?: string): string {
+  if (!region) return "";
+  const found = REGIONS.find((r) => r.value === region);
+  // Return only the emoji (first char cluster)
+  return found ? found.label.split(" ")[0] : "";
+}
 
 function presenceToCoworker(presence: FloorPresence): Coworker {
   return {
@@ -22,6 +30,7 @@ function presenceToCoworker(presence: FloorPresence): Coworker {
     room: presence.room,
     activity: presence.activity,
     goal: presence.goal ?? "",
+    region: presence.region,
   };
 }
 
@@ -53,6 +62,7 @@ export function OfficeFloor({ roomId }: { roomId: RoomId }) {
           room: session.room,
           activity: session.activity,
           goal: session.goal,
+          region: session.region,
         },
         source: "local",
       });
@@ -113,6 +123,11 @@ export function OfficeFloor({ roomId }: { roomId: RoomId }) {
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="font-semibold text-floor-ink">{displayName(card)}</h2>
+                    {regionLabel(card.coworker.region) ? (
+                      <span className="text-base" title={card.coworker.region}>
+                        {regionLabel(card.coworker.region)}
+                      </span>
+                    ) : null}
                     <span className="border border-floor-line px-2 py-0.5 text-[11px] uppercase text-floor-muted">
                       {t(`${card.source}Badge`)}
                     </span>
@@ -152,14 +167,19 @@ export function OfficeFloor({ roomId }: { roomId: RoomId }) {
           {t("clockOut")}
         </Link>
 
-        <div className="border border-floor-line bg-white/60 p-4">
-          <p className="text-sm font-semibold text-floor-ink">{t("deskChecks")}</p>
+        <Link href="/ship-wall" className="group block border border-floor-line bg-white/60 p-4 transition-colors hover:bg-white">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-floor-ink">{t("deskChecks")}</p>
+            <span className="text-xs font-medium text-floor-green opacity-0 transition-opacity group-hover:opacity-100">
+              View all →
+            </span>
+          </div>
           <p className="mt-2 text-sm text-floor-muted">
             {deskChecks.length
               ? t("saved", { count: deskChecks.length, status: deskChecks[deskChecks.length - 1].status })
               : t("none")}
           </p>
-        </div>
+        </Link>
       </aside>
     </main>
   );

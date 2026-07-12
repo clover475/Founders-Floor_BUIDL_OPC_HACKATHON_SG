@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   sessionHistory: "founders-floor:session-history:v1",
   deskChecks: "founders-floor:desk-checks:v1",
   ships: "founders-floor:ships:v1",
+  clockInTemplate: "founders-floor:clock-in-template:v1",
 };
 
 export function loadSession() {
@@ -15,6 +16,14 @@ export function loadSession() {
 
 export function saveSession(session: FounderSession) {
   writeLocalValue(STORAGE_KEYS.session, session);
+}
+
+export function loadClockInTemplate() {
+  return readLocalValue<Partial<FounderSession> | null>(STORAGE_KEYS.clockInTemplate, null);
+}
+
+export function saveClockInTemplate(template: Partial<FounderSession>) {
+  writeLocalValue(STORAGE_KEYS.clockInTemplate, template);
 }
 
 export function clearSession() {

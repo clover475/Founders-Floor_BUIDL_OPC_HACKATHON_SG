@@ -1,15 +1,54 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowRight, HelpCircle, UserRound } from "lucide-react";
+import { ArrowRight, HelpCircle, MapPin, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
 import { createLocalId, getOrCreateParticipant, saveParticipantNickname } from "@/lib/identity";
-import { archiveSession, loadSession, saveSession } from "@/lib/storage/repository";
+import {
+  archiveSession,
+  loadClockInTemplate,
+  loadSession,
+  saveClockInTemplate,
+  saveSession,
+} from "@/lib/storage/repository";
 import type { Activity, FounderSession, RoomId } from "@/types/domain";
 
 const roomIds: RoomId[] = ["idea", "build", "feedback", "growth"];
 const activities: Activity[] = ["focused", "open_to_chat"];
+
+// Regions: emoji flag + city / region label
+export const REGIONS = [
+  { value: "sg", label: "🇸🇬 Singapore" },
+  { value: "cn", label: "🇨🇳 China" },
+  { value: "hk", label: "🇭🇰 Hong Kong" },
+  { value: "tw", label: "🇹🇼 Taiwan" },
+  { value: "jp", label: "🇯🇵 Japan" },
+  { value: "kr", label: "🇰🇷 Korea" },
+  { value: "in", label: "🇮🇳 India" },
+  { value: "id", label: "🇮🇩 Indonesia" },
+  { value: "th", label: "🇹🇭 Thailand" },
+  { value: "vn", label: "🇻🇳 Vietnam" },
+  { value: "my", label: "🇲🇾 Malaysia" },
+  { value: "ph", label: "🇵🇭 Philippines" },
+  { value: "au", label: "🇦🇺 Australia" },
+  { value: "nz", label: "🇳🇿 New Zealand" },
+  { value: "gb", label: "🇬🇧 United Kingdom" },
+  { value: "de", label: "🇩🇪 Germany" },
+  { value: "fr", label: "🇫🇷 France" },
+  { value: "nl", label: "🇳🇱 Netherlands" },
+  { value: "se", label: "🇸🇪 Sweden" },
+  { value: "es", label: "🇪🇸 Spain" },
+  { value: "us", label: "🇺🇸 United States" },
+  { value: "ca", label: "🇨🇦 Canada" },
+  { value: "br", label: "🇧🇷 Brazil" },
+  { value: "mx", label: "🇲🇽 Mexico" },
+  { value: "ae", label: "🇦🇪 UAE" },
+  { value: "il", label: "🇮🇱 Israel" },
+  { value: "ng", label: "🇳🇬 Nigeria" },
+  { value: "za", label: "🇿🇦 South Africa" },
+  { value: "other", label: "🌍 Elsewhere" },
+] as const;
 
 export function ClockInForm() {
   const router = useRouter();
@@ -21,18 +60,25 @@ export function ClockInForm() {
   const [goal, setGoal] = useState("");
   const [helpNeed, setHelpNeed] = useState("");
   const [projectName, setProjectName] = useState("");
+  const [region, setRegion] = useState("sg"); // default Singapore (hackathon location)
 
   useEffect(() => {
     const participant = getOrCreateParticipant();
     const existing = loadSession();
+    const template = loadClockInTemplate();
 
     setNickname(participant.nickname === "Solo founder" ? "" : participant.nickname);
-    if (existing) {
-      setRoom(existing.room);
-      setActivity(existing.activity);
-      setGoal(existing.goal);
-      setHelpNeed(existing.helpNeed ?? "");
-      setProjectName(existing.projectName ?? "");
+    
+    // Prioritize active session, then fall back to saved template
+    const source = existing || template;
+    
+    if (source) {
+      if (source.room) setRoom(source.room);
+      if (source.activity) setActivity(source.activity);
+      if (source.goal) setGoal(source.goal);
+      if (source.helpNeed) setHelpNeed(source.helpNeed);
+      if (source.projectName) setProjectName(source.projectName);
+      if (source.region) setRegion(source.region);
     }
   }, []);
 
@@ -55,15 +101,20 @@ export function ClockInForm() {
       goal: goal.trim() || t("defaultGoal"),
       helpNeed: helpNeed.trim() || undefined,
       projectName: projectName.trim() || undefined,
+      region,
       checkedInAt: new Date().toISOString(),
     };
 
     saveSession(session);
+    // Save as template for future clock-ins
+    saveClockInTemplate({ room, activity, goal: goal.trim(), helpNeed: helpNeed.trim(), projectName: projectName.trim(), region });
+    
     router.push(`/office/${room}`);
   }
 
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
+      {/* Display name */}
       <div className="grid gap-2">
         <label htmlFor="nickname" className="text-sm font-medium text-floor-ink">
           {t("displayName")}
@@ -80,6 +131,29 @@ export function ClockInForm() {
         </div>
       </div>
 
+      {/* Region picker */}
+      <div className="grid gap-2">
+        <label htmlFor="region" className="text-sm font-medium text-floor-ink">
+          {t("region")}
+        </label>
+        <div className="flex items-center gap-2 border border-floor-line bg-white px-3">
+          <MapPin size={17} className="text-floor-muted" aria-hidden="true" />
+          <select
+            id="region"
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className="min-h-12 flex-1 bg-transparent text-sm outline-none cursor-pointer"
+          >
+            {REGIONS.map((r) => (
+              <option key={r.value} value={r.value}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Project */}
       <div className="grid gap-2">
         <label htmlFor="projectName" className="text-sm font-medium text-floor-ink">
           {t("project")}
@@ -93,6 +167,7 @@ export function ClockInForm() {
         />
       </div>
 
+      {/* Goal */}
       <div className="grid gap-2">
         <label htmlFor="goal" className="text-sm font-medium text-floor-ink">
           {t("goal")}
@@ -107,6 +182,7 @@ export function ClockInForm() {
         />
       </div>
 
+      {/* Help need */}
       <div className="grid gap-2">
         <label htmlFor="helpNeed" className="text-sm font-medium text-floor-ink">
           {t("help")}
@@ -123,6 +199,7 @@ export function ClockInForm() {
         </div>
       </div>
 
+      {/* Room selector */}
       <fieldset className="grid gap-2">
         <legend className="text-sm font-medium text-floor-ink">{t("chooseRoom")}</legend>
         <div className="grid gap-2 sm:grid-cols-2">
@@ -150,6 +227,7 @@ export function ClockInForm() {
         </div>
       </fieldset>
 
+      {/* Status */}
       <fieldset className="grid gap-2">
         <legend className="text-sm font-medium text-floor-ink">{t("status")}</legend>
         <div className="flex flex-wrap gap-2">

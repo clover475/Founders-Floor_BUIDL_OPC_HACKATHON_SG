@@ -1,114 +1,135 @@
-# Founders' Floor
+<div align="center">
 
-> The virtual office for one-person companies.
+# Founders’ Floor
 
-Founders' Floor helps solo founders feel the presence of coworkers while they build. Members clock in, choose a room, share one goal, ask for a quick desk check, take a shared break, and clock out with something shipped.
+### Build solo. Never build alone.
 
-## Hackathon scope
+**The virtual office where solo founders build in public, together.**
 
-This repository is for **BUIDL_OPC_Hackathon_SG 2026**. The demo must prove one complete loop:
+<br />
 
-```text
-Clock In → See coworkers → Ask or help → Take a break → Clock Out → Ship
-```
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Product-111111?style=for-the-badge)](https://founders-floor-buidl-opc-hackathon.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-111111?style=for-the-badge&logo=github)](https://github.com/clover475/Founders-Floor_BUIDL_OPC_HACKATHON_SG)
 
-The hackathon uses a strict Fresh Code Rule. All submitted code must be written during the official 11:00–18:00 SGT hacking period, with visible version-control history.
+<br />
 
-## Stack
+**🏆 Built for BUIDL OPC Hackathon SG**
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Local browser storage for the personal demo journey
-- Supabase Realtime for live presence, room state, and audience feedback
-- Jitsi iframe meetings for Coffee Corner and Elevator Stage
-- English and Simplified Chinese interface powered by `use-intl`
-- Vercel deployment
+*Proudly supported by our incredible sponsors and partners (Add sponsor logos/names here)*
 
-No login, database tables, custom WebRTC, complex matching, or AI agent is required for the MVP.
+</div>
 
-## Planned routes
+---
 
-| Route | Purpose |
-|---|---|
-| `/` | Lobby and live floor overview |
-| `/clock-in` | 60-second session setup |
-| `/office/[room]` | Room and coworker presence |
-| `/desk-check` | Request or accept quick help |
-| `/coffee-corner` | Join the shared four-seat live coffee table |
-| `/elevator` | Join a live pitch stage or audience |
-| `/clock-out` | Submit a concrete outcome |
-| `/ship-wall` | Celebrate work shipped today |
+## What it is
 
-## Local setup
+Founders’ Floor is an online workplace and hands-on community for one-person company founders and independent builders.
 
-```bash
-npm install
-cp .env.example .env.local
-npm run dev
-```
+It gives solo founders both a place to work and a place to take a break, interact, and receive lightweight feedback from other builders.
 
-The app works without Supabase variables. In that mode, Coffee Corner and Elevator Stage show local demo states so the personal Clock In to Ship Wall journey still works.
+---
 
-## Vercel environment
+## Why it matters
 
-The app supports Supabase's Vercel integration variables. If the integration creates
-`SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, the Next.js build maps them to the
-public browser config automatically.
+AI has made solo founders more productive, but it has not given them coworkers, shared routines, or the informal moments that normally happen in an office.
 
-Manual fallback variables are also supported in Vercel Project Settings ->
-Environment Variables:
+Founders’ Floor recreates those everyday moments online: working alongside others, asking for quick help, taking a short break, practising how to explain an idea, and making progress visible.
+
+---
+
+## Core flow
 
 ```text
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-NEXT_PUBLIC_EVENT_SLUG=founders-floor-hackathon
-NEXT_PUBLIC_JITSI_DOMAIN=meet.jit.si
+Clock In
+→ Choose a Work Room
+→ Build Alongside Others
+→ Visit the Break Room
+→ Return to Work
+→ Clock Out
+→ Add a Completed Achievement
+→ Grow the Achievement Forest
 ```
 
-Use only the Supabase publishable browser key for public realtime config. Do not
-use a service-role key in browser-facing variables or this repository.
+---
 
-## Demo story
+## Break Room Experiences
 
-1. Clock in as a founder who is improving a landing-page pitch.
-2. Enter the Feedback Room and see other builders.
-3. Open a 10-minute desk check and mark it accepted.
-4. Join Coffee Corner for a short shared break or run Elevator Stage with one speaker and one audience browser.
-5. Clock out with an updated one-line pitch.
-6. See the result appear on the Ship Wall.
+The Break Room is not another work area. It is a lightweight social space designed to help founders pause, interact, and return to work with more energy and clarity.
 
-## Smoke tests
+### AI Elevator Pitch Coach
 
-Before presenting:
+Users can record or enter a Product, Idea, or Founder Pitch.
 
-- `npm run lint`
-- `npm run build`
-- Open one browser with realtime disabled and complete Clock In -> Desk Check -> Clock Out -> Ship Wall.
-- Open two browsers on `/coffee-corner`; join from both and confirm both use the same Jitsi room.
-- Open two browsers on `/elevator`; start one round as speaker, join from the second browser as audience, submit feedback, and confirm the speaker result card updates.
-- Open the app at a mobile width and confirm Coffee Corner, Elevator Stage, and Ship Wall remain usable.
+The AI:
 
-See [stage checklist](docs/stage-checklist.md) for the timed demo and backup recording plan.
+- checks whether the pitch clearly explains the target user, problem, solution, and call to action;
+- reviews basic delivery signals such as duration, word count, and filler words;
+- gives one priority improvement;
+- creates a clearer 30-second rewrite without inventing facts.
 
-## Project memory
+### K-PLAY Coffee Break
 
-- [Product scope](docs/product.md)
-- [Architecture](docs/architecture.md)
-- [Data schema](docs/data-schema.md)
-- [Hackathon compliance](docs/hackathon.md)
-- [Design rationale](docs/design-rationale.md)
-- [Decisions](docs/decisions.md)
-- [Current status](PROJECT_STATUS.md)
+K-PLAY is a lightweight coffee-break experience inside the Break Room.
 
-## Credits
+It gives founders a simple reason to step away from isolated work, join a short shared interaction, and reconnect with the people working on the same floor before returning to their tasks.
 
-Built by Clover Li with AI-assisted development during BUIDL_OPC_Hackathon_SG 2026.
+---
 
-Third-party libraries and services used in the MVP:
+## Achievement Forest
 
-- Next.js, React, TypeScript, and Tailwind CSS for the web app.
-- Supabase Realtime Presence and Broadcast for ephemeral Coffee Corner seats and Elevator Stage feedback.
-- Jitsi Meet iframe URLs for live Coffee Corner and Elevator Stage conversation.
-- Lucide React for interface icons.
-- `use-intl`, the React core package from the next-intl project, for ICU message formatting and locale context.
+Founders’ Floor rewards completed outcomes rather than time spent online.
+
+When users Clock Out, they submit what they actually completed. Each submitted outcome is added to their achievement history. After reaching a milestone, such as ten completed achievements, the user unlocks a new tree in their personal Achievement Forest.
+
+Unlike traditional focus apps that grow trees based on time, the Achievement Forest grows from real progress—ideas validated, products tested, features shipped, users contacted, and other meaningful outcomes.
+
+Over time, the forest becomes a visual record of what the founder has built, tested, learned, and shipped.
+
+---
+
+## Current MVP
+
+The current demo includes:
+
+- Clock In and Clock Out;
+- Idea, Build, Feedback, and Growth rooms;
+- founder task and status cards;
+- Desk Check;
+- Break Room;
+- AI Elevator Pitch Coach;
+- K-PLAY Coffee Break;
+- Community Board (open desk-check requests plus the Ship Wall);
+- Work Log with a persistent clock-in history and an Achievement Forest;
+- demo member data and local progress storage.
+
+Some members and interactions currently use demonstration data.
+
+---
+
+## Product vision
+
+Founders’ Floor starts with a virtual office, but the long-term goal is to build a hands-on community for one-person companies.
+
+The platform will combine daily coworking, lightweight social interaction, product feedback, visible achievement accumulation, recurring OPC Sprints, Founder Crews, and resource exchange.
+
+---
+
+## Business model
+
+Founders’ Floor plans to use a freemium membership model.
+
+Basic public office and Break Room experiences will remain free. Revenue will mainly come from annual OPC memberships, paid Sprints, and premium Founder Circles for members seeking deeper peer support, product feedback, and long-term founder relationships.
+
+---
+
+## Tech Stack
+
+- **Framework**: Next.js (App Router), React
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Real-time / Database**: Supabase Realtime (Presence)
+- **AI Integration**: OpenAI-compatible API (configured for DeepSeek or similar models)
+- **Video Conferencing**: Jitsi Meet integration
+- **Storage**: Browser localStorage for persistence
+- **Deployment**: Vercel
+

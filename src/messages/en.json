@@ -1,6 +1,6 @@
 {
   "language": { "english": "English", "chinese": "Chinese", "switchTo": "Switch to {language}" },
-  "nav": { "floor": "Floor", "coffee": "Coffee", "elevator": "Elevator", "workLog": "Work log", "clockOut": "Clock out" },
+  "nav": { "floor": "Floor", "community": "Community Board", "coffee": "Coffee", "elevator": "Elevator", "workLog": "Work log", "clockOut": "Clock out" },
   "rooms": {
     "idea": { "name": "Idea Room", "description": "Explore opportunities, user problems, and rough founder ideas." },
     "build": { "name": "Build Room", "description": "Work around other builders who are shipping MVPs today." },
@@ -9,7 +9,7 @@
   },
   "home": {
     "tagline": "The office for one-person companies",
-    "description": "Clock in, see who else is building, ask for a ten-minute desk check, and clock out with something shipped.",
+    "description": "Build solo. Never build alone.",
     "clockIn": "Clock in"
   },
   "clockIn": {
@@ -17,6 +17,7 @@
     "title": "Choose your floor for today",
     "description": "You can join with a product, an idea, or just a direction you want to explore. Project information is optional.",
     "displayName": "Display name",
+    "region": "Where are you building from?",
     "project": "Project or idea, optional",
     "projectPlaceholder": "Leave this blank if you are exploring",
     "goal": "Today I want to finish",
@@ -94,11 +95,15 @@
     "openSeat": "Open seat {number}",
     "joined": "joined",
     "available": "available",
+    "takeSeat": "Take seat {number}",
     "leave": "Leave table",
     "full": "Table full",
     "join": "Join Coffee Corner",
-    "joinTitle": "Join to open the live table",
-    "joinDescription": "The meeting is embedded only after you take a seat. Each coffee room has its own deterministic meeting link.",
+    "previewVideo": "Preview meeting room",
+    "previewNote": "Preview only — this does not reserve a seat.",
+    "setupRoom": "Set up this room",
+    "joinTitle": "Take a seat to open the live meeting",
+    "joinDescription": "The meeting loads only after you sit down. Click an open seat or use the button below.",
     "room": "Room: {room}"
   },
   "elevator": {
@@ -184,13 +189,19 @@
     "durationUnknown": "duration unknown"
   },
   "shipWall": {
-    "eyebrow": "Ship Wall",
-    "title": "Progress people can see",
-    "new": "New work session",
-    "meta": "{room} room · {date}",
-    "helped": "helped by {name}",
-    "noneTitle": "No ships yet",
-    "noneDescription": "Clock in, ask for a desk check if needed, then publish one visible piece of progress here."
+    "eyebrow": "Community Board",
+    "title": "Community Board",
+    "new": "New",
+    "deskCheckEyebrow": "Requests",
+    "deskCheckTitle": "Desk Checks",
+    "helpAndEarn": "Help & Earn Points",
+    "meta": "in {room} on {date}",
+    "helped": "Helped by {name}",
+    "noneTitle": "No ships yet.",
+    "noneDescription": "Be the first to clock out and ship something today.",
+    "noDeskChecks": "No active desk checks. Everyone is focused!",
+    "shipEyebrow": "Shipped",
+    "shipTitle": "Ship Wall"
   },
   "meeting": {
     "audio": "Audio and video start muted. Use headphones in the venue.",
