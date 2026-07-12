@@ -56,6 +56,24 @@ export function CoffeeCorner() {
           <p className="mt-4 text-sm leading-6 text-floor-muted">{statusCopy(coffee.status)}</p>
         </div>
 
+        {coffee.status === "connecting" ? (
+          <div className="border border-floor-line bg-floor-panel p-3 text-sm text-floor-muted">
+            Watching the live seat state before you join.
+          </div>
+        ) : null}
+
+        {coffee.status === "error" ? (
+          <div className="border border-floor-line bg-white p-3 text-sm text-floor-muted">
+            Realtime is disconnected. The meeting room can still open, and the personal demo flow is unaffected.
+          </div>
+        ) : null}
+
+        {coffee.tableFull ? (
+          <div className="border border-floor-line bg-white p-3 text-sm text-floor-muted">
+            The four-seat table is full. Stay on this page to watch for an open seat.
+          </div>
+        ) : null}
+
         <div className="grid gap-2">
           {Array.from({ length: coffee.capacity }).map((_, index) => {
             const participant = coffee.participants[index];

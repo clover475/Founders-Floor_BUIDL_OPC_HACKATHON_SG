@@ -95,6 +95,24 @@ export function ElevatorStage() {
           ) : null}
         </div>
 
+        {elevator.status === "connecting" ? (
+          <div className="border border-floor-line bg-floor-panel p-3 text-sm text-floor-muted">
+            Connecting to the shared stage before roles are tracked.
+          </div>
+        ) : null}
+
+        {elevator.status === "error" ? (
+          <div className="border border-floor-line bg-white p-3 text-sm text-floor-muted">
+            Realtime is disconnected. You can still use the meeting room and save a local result.
+          </div>
+        ) : null}
+
+        {elevator.speakerBlocked && !elevator.currentRound ? (
+          <div className="border border-floor-line bg-white p-3 text-sm text-floor-muted">
+            One speaker is already on stage. Join as audience or wait for reset.
+          </div>
+        ) : null}
+
         {!elevator.currentRound ? (
           <form onSubmit={onStart} className="grid gap-3 border border-floor-line bg-white/80 p-4">
             <label htmlFor="pitch" className="text-sm font-medium text-floor-ink">
